@@ -2839,14 +2839,14 @@ body.nad-density-compact .mes {
    ============================================================ */
 .nad-user-profile-bar {
     position: fixed;
-    left: var(--nav-bar-width);
-    bottom: 4px;
+    left: calc(var(--nav-bar-width) + 4px);
+    bottom: 7px;
     z-index: 60;
     display: flex;
     align-items: center;
     gap: 10px;
-    box-sizing: border-box;
-    width: var(--nad-user-profile-width);
+    box-sizing: border-box !important;
+    width: calc(var(--nad-user-profile-width) - 8px);
     height: var(--nad-composer-height, var(--text-imput-height, 42px));
     padding: 0 10px !important;
     overflow: hidden;
