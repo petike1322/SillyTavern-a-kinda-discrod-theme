@@ -1,6 +1,7 @@
 import { eventSource, event_types, getThumbnailUrl, name1 } from '../../../../../script.js';
 import { power_user } from '../../../../power-user.js';
 import { user_avatar } from '../../../../personas.js';
+import { toggleDrawer } from './drawerClickOverride.js';
 
 const BAR_ID = 'nad-user-profile-bar';
 
@@ -63,7 +64,8 @@ function createUserProfileBar() {
     barEl.addEventListener('click', (event) => {
         event.preventDefault();
         event.stopPropagation();
-        document.querySelector('#persona-management-button > .drawer-toggle')?.click();
+        const toggle = document.querySelector('#persona-management-button > .drawer-toggle');
+        if (toggle) toggleDrawer(toggle);
     });
 
     document.body.appendChild(barEl);

@@ -8,10 +8,15 @@ export function drawerClickOverride () {
 }
 
 function doNavbarIconClick() {
-    const icon = $(this).find('.drawer-icon');
-    const drawer = $(this).parent().find('.drawer-content');
-    const drawerWasOpenAlready = $(this).parent().find('.drawer-content').hasClass('openDrawer');
-    const targetDrawerID = $(this).parent().find('.drawer-content').attr('id');
+    toggleDrawer(this);
+}
+
+export function toggleDrawer(drawerToggle) {
+    const toggle = $(drawerToggle);
+    const icon = toggle.find('.drawer-icon');
+    const drawer = toggle.parent().find('.drawer-content');
+    const drawerWasOpenAlready = drawer.hasClass('openDrawer');
+    const targetDrawerID = drawer.attr('id');
     const pinnedDrawerClicked = drawer.hasClass('pinnedOpen');
     
     if (!drawerWasOpenAlready) {
