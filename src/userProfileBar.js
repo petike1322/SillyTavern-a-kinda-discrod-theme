@@ -51,7 +51,7 @@ function createUserProfileBar() {
     barEl.id = BAR_ID;
     barEl.className = 'nad-user-profile-bar';
     barEl.type = 'button';
-    barEl.setAttribute('aria-label', 'Open persona manager');
+    barEl.setAttribute('aria-label', 'Toggle persona manager');
     barEl.innerHTML = `
         <span class="nad-user-profile-avatar">
             <img alt="">
@@ -60,11 +60,10 @@ function createUserProfileBar() {
         <span class="nad-user-profile-name"></span>
         <i class="nad-user-profile-menu fa-solid fa-ellipsis" aria-hidden="true"></i>`;
 
-    barEl.addEventListener('click', () => {
-        const drawer = document.querySelector('#persona-management-button .drawer-content');
-        if (!drawer?.classList.contains('openDrawer')) {
-            document.querySelector('#persona-management-button .drawer-toggle')?.click();
-        }
+    barEl.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        document.querySelector('#persona-management-button > .drawer-toggle')?.click();
     });
 
     document.body.appendChild(barEl);
