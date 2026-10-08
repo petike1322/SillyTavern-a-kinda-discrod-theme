@@ -243,24 +243,25 @@ body:has(#bg1) {
      var(--panel-logprobs-visible)) * var(--panel-base-width)
   );
   
-  /* Individual panel positions (accumulated from right) */
-  --panel-settings-offset: 0px;
-  --panel-notes-offset: calc(var(--panel-settings-visible) * var(--panel-base-width));
-  --panel-gallery-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible)) * var(--panel-base-width));
-  --panel-summary-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible)) * var(--panel-base-width));
-  --panel-members-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible)) * var(--panel-base-width));
-  --panel-tracker-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible)) * var(--panel-base-width));
-  --panel-cfg-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible)) * var(--panel-base-width));
-  --panel-objective-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible)) * var(--panel-base-width));
-  --panel-inject-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible)) * var(--panel-base-width));
-  --panel-extension-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible)) * var(--panel-base-width));
-  --panel-lvm-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible) + var(--panel-extension-visible)) * var(--panel-base-width));
-  --panel-ctsi-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible) + var(--panel-extension-visible) + var(--panel-lvm-visible)) * var(--panel-base-width));
-  --panel-ts-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible) + var(--panel-extension-visible) + var(--panel-lvm-visible) + var(--panel-ctsi-visible)) * var(--panel-base-width));
-  --panel-vv-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible) + var(--panel-extension-visible) + var(--panel-lvm-visible) + var(--panel-ctsi-visible) + var(--panel-ts-visible)) * var(--panel-base-width));
-  --panel-notebook-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible) + var(--panel-extension-visible) + var(--panel-lvm-visible) + var(--panel-ctsi-visible) + var(--panel-ts-visible) + var(--panel-vv-visible)) * var(--panel-base-width));
-  --panel-codex-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible) + var(--panel-extension-visible) + var(--panel-lvm-visible) + var(--panel-ctsi-visible) + var(--panel-ts-visible) + var(--panel-vv-visible) + var(--panel-notebook-visible)) * var(--panel-base-width));
-  --panel-logprobs-offset: calc((var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible) + var(--panel-extension-visible) + var(--panel-lvm-visible) + var(--panel-ctsi-visible) + var(--panel-ts-visible) + var(--panel-vv-visible) + var(--panel-notebook-visible) + var(--panel-codex-visible)) * var(--panel-base-width));
+  /* Individual panel positions (accumulated from right, offset by the
+     character profile dock which sits at the far right edge) */
+  --panel-settings-offset: var(--nad-profile-width);
+  --panel-notes-offset: calc(var(--nad-profile-width) + var(--panel-settings-visible) * var(--panel-base-width));
+  --panel-gallery-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible)) * var(--panel-base-width));
+  --panel-summary-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible)) * var(--panel-base-width));
+  --panel-members-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible)) * var(--panel-base-width));
+  --panel-tracker-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible)) * var(--panel-base-width));
+  --panel-cfg-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible)) * var(--panel-base-width));
+  --panel-objective-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible)) * var(--panel-base-width));
+  --panel-inject-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible)) * var(--panel-base-width));
+  --panel-extension-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible)) * var(--panel-base-width));
+  --panel-lvm-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible) + var(--panel-extension-visible)) * var(--panel-base-width));
+  --panel-ctsi-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible) + var(--panel-extension-visible) + var(--panel-lvm-visible)) * var(--panel-base-width));
+  --panel-ts-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible) + var(--panel-extension-visible) + var(--panel-lvm-visible) + var(--panel-ctsi-visible)) * var(--panel-base-width));
+  --panel-vv-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible) + var(--panel-extension-visible) + var(--panel-lvm-visible) + var(--panel-ctsi-visible) + var(--panel-ts-visible)) * var(--panel-base-width));
+  --panel-notebook-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible) + var(--panel-extension-visible) + var(--panel-lvm-visible) + var(--panel-ctsi-visible) + var(--panel-ts-visible) + var(--panel-vv-visible)) * var(--panel-base-width));
+  --panel-codex-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible) + var(--panel-extension-visible) + var(--panel-lvm-visible) + var(--panel-ctsi-visible) + var(--panel-ts-visible) + var(--panel-vv-visible) + var(--panel-notebook-visible)) * var(--panel-base-width));
+  --panel-logprobs-offset: calc(var(--nad-profile-width) + (var(--panel-settings-visible) + var(--panel-notes-visible) + var(--panel-gallery-visible) + var(--panel-summary-visible) + var(--panel-members-visible) + var(--panel-tracker-visible) + var(--panel-cfg-visible) + var(--panel-objective-visible) + var(--panel-inject-visible) + var(--panel-extension-visible) + var(--panel-lvm-visible) + var(--panel-ctsi-visible) + var(--panel-ts-visible) + var(--panel-vv-visible) + var(--panel-notebook-visible) + var(--panel-codex-visible)) * var(--panel-base-width));
   
 
   --expression-image-lorebook-width: 0px;
@@ -288,7 +289,7 @@ body:has(#bg1) {
 
   --center-panels-width: calc(100vw - var(--nav-bar-width) - var(--panels-reserved-width) - var(--char-panel-width) - var(--nad-profile-width));
   --chat-panel-width: calc(var(--center-panels-width) - var(--expression-reserved-width));
-  --chat-panel-left-offset: calc(var(--nav-bar-width) + var(--char-panel-width) + var(--nad-profile-width));
+  --chat-panel-left-offset: calc(var(--nav-bar-width) + var(--char-panel-width));
 
 }
 
@@ -462,7 +463,7 @@ body:has(#gallery.draggable) {
 
 /*1*/
 #left-nav-panel.drawer-content {
-  right: 0 !important;
+  right: var(--panel-settings-offset) !important;
   background-color: var(--nad-surface-1) !important;
   padding: 0;
 }
@@ -678,7 +679,7 @@ body.nad-overlay-panels #logprobsViewer:not(.maximized) {
 }
 
 body.nad-overlay-panels #left-nav-panel.drawer-content {
-  right: 4px !important;
+  right: calc(var(--panel-settings-offset) + 4px) !important;
 }
 
 @keyframes nad-panel-in {
@@ -2688,9 +2689,9 @@ body.bubblechat .welcomePanel{
   body.nad-overlay-panels #notebookPanel,
   body.nad-overlay-panels .stcdx--root,
   body.nad-overlay-panels #left-nav-panel.drawer-content {
-    right: 4px !important;
+    right: calc(var(--nad-profile-width) + 4px) !important;
     left: var(--nav-bar-width) !important;
-    width: calc(100vw - var(--nav-bar-width) - 8px) !important;
+    width: calc(100vw - var(--nav-bar-width) - var(--nad-profile-width) - 8px) !important;
   }
   
 }
@@ -2822,14 +2823,14 @@ body.nad-density-compact .mes {
 }
 
 /* ============================================================
-   NAD v2 — Discord-style Character Profile (permanent left dock)
+   NAD v2 — Discord-style Character Profile (permanent right dock)
    ============================================================ */
 
 .nad-profile-popout {
     position: fixed;
     top: 4px;
     bottom: 4px;
-    left: calc(var(--nav-bar-width, 48px) + var(--char-panel-width, 0px));
+    right: 0;
     width: var(--nad-profile-width, 340px);
     display: flex;
     flex-direction: column;
@@ -2843,21 +2844,24 @@ body.nad-density-compact .mes {
     z-index: 20;
 }
 
+/* The character image fills the top of the panel, uncropped. */
 .nad-profile-banner {
     position: relative;
-    height: 96px;
     flex-shrink: 0;
     background-color: var(--nad-surface-4);
     background-image: var(--nad-profile-banner);
-    background-size: cover;
-    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center top;
+    aspect-ratio: 1 / 1;
+    max-height: 55%;
 }
 
 .nad-profile-banner::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 40%, var(--nad-surface-2) 100%);
+    background: linear-gradient(to bottom, transparent 55%, var(--nad-surface-2) 100%);
 }
 
 .nad-profile-header {
@@ -2866,7 +2870,7 @@ body.nad-density-compact .mes {
     align-items: flex-end;
     gap: var(--nad-space-3);
     padding: 0 var(--nad-space-4);
-    margin-top: -36px;
+    margin-top: -52px;
     z-index: 1;
 }
 
