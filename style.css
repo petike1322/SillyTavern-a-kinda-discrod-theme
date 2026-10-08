@@ -202,6 +202,7 @@ body:has(#bg1) {
   --avatar-base-width: 50px;
   --avatar-base-height: 50px;
   --text-imput-height: 42px;
+  --nad-composer-height: var(--text-imput-height);
 
   /* Panel visibility flags (0 = hidden, 1 = visible) */
   --panel-char-visible: 0;
@@ -288,9 +289,10 @@ body:has(#bg1) {
   */
   --nad-profile-width: 340px;
 
-  --center-panels-width: calc(100vw - var(--nav-bar-width) - var(--panels-reserved-width) - var(--char-panel-width) - var(--nad-profile-width) - var(--nad-user-profile-width) - 8px);
+  --center-panels-width: calc(100vw - var(--nav-bar-width) - var(--panels-reserved-width) - var(--char-panel-width) - var(--nad-profile-width));
   --chat-panel-width: calc(var(--center-panels-width) - var(--expression-reserved-width));
-  --chat-panel-left-offset: calc(var(--nav-bar-width) + var(--char-panel-width) + var(--nad-user-profile-width) + 8px);
+  --chat-panel-left-offset: calc(var(--nav-bar-width) + var(--char-panel-width));
+  --char-panel-width: var(--nad-user-profile-width);
 
 }
 
@@ -303,23 +305,6 @@ body.nad-overlay-panels {
 body:has(#bg1).nad-profile-disabled {
   --nad-profile-width: 0px;
 }
-
-body.charListGrid:has(#right-nav-panel.openDrawer):not(#rm_ch_create_block) {
-  --char-panel-width: calc(var(--NSDlistGrid-char-panel-width) * 1px);
-}
-
-body:has(#right-nav-panel.openDrawer) {
-  --char-panel-width: calc(var(--NSDnormal-char-panel-width) * 1px);
-}
-
-body:has(#rm_ch_create_block:is([style*="display: block; opacity: 1;"])) {
-  --char-panel-width: calc(var(--NSDnormal-char-panel-width) * 1px) !important;
-}
-
-body:has(#right-nav-panel.closedDrawer) {
-  --char-panel-width: 0px !important;
-}
-
 
 body:has(.stqrd--editorPanel:is(body > *)),
 body:has(#stqrd--drawer-v2.openDrawer),
@@ -856,6 +841,7 @@ body.waifuMode .zoomed_avatar {
 
 #right-nav-panel {
 
+  position: fixed !important;
   background-color: var(--nad-surface-1) !important;
   backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
   -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
@@ -863,17 +849,28 @@ body.waifuMode .zoomed_avatar {
   border-top-right-radius: 0px !important;
   border-left: 1px solid var(--nad-glass-border) !important;
   border-top: 1px solid var(--nad-glass-border) !important;
-  left: calc(var(--nav-bar-width) + var(--nad-user-profile-width) + 8px);
-  width: var(--char-panel-width);
-  height: calc(100svh);
-  z-index: 10 !important;
+  left: var(--nav-bar-width);
+  width: var(--nad-user-profile-width);
+  top: 4px !important;
+  bottom: calc(var(--nad-composer-height) + 12px);
+  height: auto;
+  z-index: 30 !important;
   max-height: unset;
   min-width: unset !important;
   padding: 0px !important;
   margin: 0px 0px 0px 0px !important;
   border: 0;
-  top: 4px !important;
   border-radius: 0;
+  flex-direction: column;
+}
+
+#right-nav-panel.openDrawer,
+#right-nav-panel.closedDrawer {
+  display: flex !important;
+  visibility: visible !important;
+  transform: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
 #cfgConfig.maximized,
@@ -2636,8 +2633,10 @@ body.bubblechat .welcomePanel{
   }
 
   #right-nav-panel {
-    left: calc(var(--nav-bar-width) + var(--nad-user-profile-width) + 8px) !important;
-    width: calc(100vw - var(--nav-bar-width) - var(--nad-user-profile-width) - 8px) !important;
+    left: var(--nav-bar-width) !important;
+    width: var(--nad-user-profile-width) !important;
+    top: 4px !important;
+    bottom: calc(var(--nad-composer-height) + 12px) !important;
     background-color: var(--nad-surface-solid) !important;
     min-width: unset !important;
   }
@@ -2651,8 +2650,8 @@ body.bubblechat .welcomePanel{
 
   #sheld,
   #character_popup {
-    left: calc(var(--nav-bar-width) + var(--nad-user-profile-width) + 8px) !important;
-    width: calc(100vw - var(--nav-bar-width) - var(--nad-user-profile-width) - 8px) !important;
+    left: var(--chat-panel-left-offset) !important;
+    width: var(--chat-panel-width) !important;
     position: absolute !important;
   }
 
@@ -2840,14 +2839,15 @@ body.nad-density-compact .mes {
    ============================================================ */
 .nad-user-profile-bar {
     position: fixed;
-    left: calc(var(--nav-bar-width) + 4px);
+    left: var(--nav-bar-width);
     bottom: 4px;
     z-index: 60;
     display: flex;
     align-items: center;
     gap: 10px;
+    box-sizing: border-box;
     width: var(--nad-user-profile-width);
-    height: var(--text-imput-height, 42px);
+    height: var(--nad-composer-height, var(--text-imput-height, 42px));
     padding: 0 10px !important;
     overflow: hidden;
     color: var(--SmartThemeBodyColor);

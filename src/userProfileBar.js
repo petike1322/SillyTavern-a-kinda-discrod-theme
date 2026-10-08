@@ -6,6 +6,17 @@ const BAR_ID = 'nad-user-profile-bar';
 
 let barEl = null;
 let listenersBound = false;
+let composerObserver = null;
+
+function syncComposerHeight() {
+    const composer = document.getElementById('send_form');
+    if (!composer) return;
+
+    const height = composer.getBoundingClientRect().height;
+    if (height > 0) {
+        document.body.style.setProperty('--nad-composer-height', `${height}px`);
+    }
+}
 
 function refreshUserProfile() {
     if (!barEl) return;
@@ -73,4 +84,12 @@ export function initUserProfileBar() {
     createUserProfileBar();
     bindEvents();
     refreshUserProfile();
+
+    const composer = document.getElementById('send_form');
+    if (composer && typeof ResizeObserver === 'function') {
+        composerObserver?.disconnect();
+        composerObserver = new ResizeObserver(syncComposerHeight);
+        composerObserver.observe(composer);
+        syncComposerHeight();
+    }
 }

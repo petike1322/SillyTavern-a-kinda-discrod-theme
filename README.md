@@ -32,8 +32,9 @@ You will need:
   **id-card icon** in the left nav rail, or disable it entirely via the
   **Character Profile Popout** setting.
 - **User Profile Bar** — a fixed bottom-left dock showing the active persona.
-  It matches the character profile panel's width, reserves layout space so chat and
-  navigation panels move aside, and opens Persona Management when clicked.
+  It matches the composer height and character panel width; the character selector
+  stays visible above it while the chat and composer reserve space for the full dock.
+  Click the bar to open Persona Management.
 
 All existing settings and CSS variables are preserved, so your saved configuration keeps
 working after upgrading.
