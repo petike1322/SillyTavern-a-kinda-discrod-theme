@@ -280,8 +280,9 @@ export function initCharacterProfile() {
 export function setCharacterProfileEnabled(value) {
     enabled = !!value;
 
-    // The CSS reserves layout space only while this class is present.
-    document.body.classList.toggle('nad-profile-enabled', enabled);
+    // The panel is visible by default; the CSS only collapses its reserved
+    // layout space when this class is present.
+    document.body.classList.toggle('nad-profile-disabled', !enabled);
 
     if (popoutEl) {
         popoutEl.style.display = enabled ? '' : 'none';

@@ -280,10 +280,11 @@ body:has(#bg1) {
 
   /*
     Character profile panel: a permanent left-side dock that reserves layout
-    space so the chat is pushed aside instead of overlapped. Width is 0 unless
-    the feature is enabled (body.nad-profile-enabled).
+    space so the chat is pushed aside instead of overlapped. Visible by
+    default; only zeroed out when explicitly disabled
+    (body.nad-profile-disabled).
   */
-  --nad-profile-width: 0px;
+  --nad-profile-width: 340px;
 
   --center-panels-width: calc(100vw - var(--nav-bar-width) - var(--panels-reserved-width) - var(--char-panel-width) - var(--nad-profile-width));
   --chat-panel-width: calc(var(--center-panels-width) - var(--expression-reserved-width));
@@ -296,9 +297,9 @@ body.nad-overlay-panels {
   --panels-push-factor: 0;
 }
 
-/* Character profile panel reserves space while enabled. */
-body.nad-profile-enabled {
-  --nad-profile-width: 340px;
+/* Character profile panel: only collapse when explicitly disabled. */
+body:has(#bg1).nad-profile-disabled {
+  --nad-profile-width: 0px;
 }
 
 body.charListGrid:has(#right-nav-panel.openDrawer):not(#rm_ch_create_block) {
@@ -3025,14 +3026,10 @@ body.nad-density-compact .mes {
     font-size: 2rem;
 }
 
-/* On small screens the profile dock is hidden so it doesn't squeeze the chat. */
+/* On small screens keep the profile dock visible, just narrower. */
 @media screen and (max-width: 1000px) {
-    body.nad-profile-enabled {
-        --nad-profile-width: 0px;
-    }
-
-    .nad-profile-popout {
-        display: none;
+    body:has(#bg1) {
+        --nad-profile-width: 260px;
     }
 }
 
