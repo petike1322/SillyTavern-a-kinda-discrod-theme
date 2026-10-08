@@ -68,8 +68,9 @@ function readField(character, key) {
 
 function getAvatarUrl(character) {
     if (!character || !character.avatar) return '';
-    // Standard SillyTavern thumbnail endpoint.
-    return `/thumbnail?type=avatar&file=${encodeURIComponent(character.avatar)}`;
+    // Always use the full-resolution character image (never the thumbnail,
+    // which is heavily downscaled and looks pixelated).
+    return `/characters/${encodeURIComponent(character.avatar)}`;
 }
 
 function substitute(text) {
