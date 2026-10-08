@@ -278,15 +278,27 @@ body:has(#bg1) {
   --panels-reserved-width: calc(var(--panels-total-width) * var(--panels-push-factor));
   --expression-reserved-width: calc(var(--expression-image-lorebook-width) * var(--panels-push-factor));
 
-  --center-panels-width: calc(100vw - var(--nav-bar-width) - var(--panels-reserved-width) - var(--char-panel-width));
+  /*
+    Character profile panel: a permanent left-side dock that reserves layout
+    space so the chat is pushed aside instead of overlapped. Width is 0 unless
+    the feature is enabled (body.nad-profile-enabled).
+  */
+  --nad-profile-width: 0px;
+
+  --center-panels-width: calc(100vw - var(--nav-bar-width) - var(--panels-reserved-width) - var(--char-panel-width) - var(--nad-profile-width));
   --chat-panel-width: calc(var(--center-panels-width) - var(--expression-reserved-width));
-  --chat-panel-left-offset: calc(var(--nav-bar-width) + var(--char-panel-width));
+  --chat-panel-left-offset: calc(var(--nav-bar-width) + var(--char-panel-width) + var(--nad-profile-width));
 
 }
 
 /* Overlay mode: panels no longer reserve horizontal space. */
 body.nad-overlay-panels {
   --panels-push-factor: 0;
+}
+
+/* Character profile panel reserves space while enabled. */
+body.nad-profile-enabled {
+  --nad-profile-width: 340px;
 }
 
 body.charListGrid:has(#right-nav-panel.openDrawer):not(#rm_ch_create_block) {
@@ -2809,38 +2821,15 @@ body.nad-density-compact .mes {
 }
 
 /* ============================================================
-   NAD v2 — Discord-style Character Profile Popout (left side)
+   NAD v2 — Discord-style Character Profile (permanent left dock)
    ============================================================ */
-
-.nad-profile-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border-radius: var(--nad-radius-md);
-    transition: background-color var(--nad-duration-fast) var(--nad-ease);
-}
-
-.nad-profile-toggle:hover {
-    background-color: var(--nad-glass-highlight);
-}
-
-.nad-profile-toggle-active {
-    background-color: var(--nad-accent-soft);
-}
-
-.nad-profile-toggle-active .drawer-icon {
-    color: var(--nad-accent) !important;
-    opacity: 1;
-}
 
 .nad-profile-popout {
     position: fixed;
     top: 4px;
+    bottom: 4px;
     left: calc(var(--nav-bar-width, 48px) + var(--char-panel-width, 0px));
-    width: 340px;
-    max-width: calc(100vw - var(--nav-bar-width, 48px) - var(--char-panel-width, 0px) - 8px);
-    max-height: calc(100dvh - 8px);
+    width: var(--nad-profile-width, 340px);
     display: flex;
     flex-direction: column;
     background-color: var(--nad-surface-2);
@@ -2848,22 +2837,9 @@ body.nad-density-compact .mes {
     -webkit-backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
     border: 1px solid var(--nad-glass-border);
     border-radius: var(--nad-radius-lg);
-    box-shadow: var(--nad-shadow-3);
+    box-shadow: var(--nad-shadow-2);
     overflow: hidden;
-    z-index: 60;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(-16px);
-    transition:
-        opacity var(--nad-duration-base) var(--nad-ease-out),
-        transform var(--nad-duration-base) var(--nad-ease-out),
-        visibility var(--nad-duration-base);
-}
-
-.nad-profile-popout.nad-profile-open {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
+    z-index: 20;
 }
 
 .nad-profile-banner {
@@ -2881,27 +2857,6 @@ body.nad-density-compact .mes {
     position: absolute;
     inset: 0;
     background: linear-gradient(to bottom, transparent 40%, var(--nad-surface-2) 100%);
-}
-
-.nad-profile-close {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--nad-radius-pill);
-    background-color: rgba(0, 0, 0, 0.45);
-    color: #fff;
-    cursor: pointer;
-    z-index: 2;
-    transition: background-color var(--nad-duration-fast) var(--nad-ease);
-}
-
-.nad-profile-close:hover {
-    background-color: rgba(0, 0, 0, 0.7);
 }
 
 .nad-profile-header {
@@ -3070,12 +3025,14 @@ body.nad-density-compact .mes {
     font-size: 2rem;
 }
 
-/* On small screens the popout takes over the full width. */
+/* On small screens the profile dock is hidden so it doesn't squeeze the chat. */
 @media screen and (max-width: 1000px) {
+    body.nad-profile-enabled {
+        --nad-profile-width: 0px;
+    }
+
     .nad-profile-popout {
-        left: var(--nav-bar-width);
-        width: calc(100vw - var(--nav-bar-width) - 8px);
-        max-width: calc(100vw - var(--nav-bar-width) - 8px);
+        display: none;
     }
 }
 

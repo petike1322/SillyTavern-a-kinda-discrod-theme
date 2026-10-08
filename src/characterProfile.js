@@ -4,9 +4,11 @@ import { DOMPurify } from '../../../../../lib.js';
 /**
  * Discord-style "User Profile" popout for the currently selected character.
  *
- * Renders a frosted-glass card on the left side of the screen with the
+ * A permanent, always-visible frosted-glass card docked to the left side of
+ * the screen. It reserves layout space (via the `--nad-profile-width` CSS
+ * variable) so the chat is pushed aside rather than overlapped. Shows the
  * character's banner, avatar, name, description, personality, scenario,
- * creator/version metadata and tags. Updates automatically when the
+ * creator/version metadata and tags, and updates automatically when the
  * selected character or chat changes.
  *
  * `this_chid` and `characters` are live ES-module bindings exported by
@@ -14,13 +16,9 @@ import { DOMPurify } from '../../../../../lib.js';
  * Characters may be "shallow" (lazy-loaded) — we unshallow on demand.
  */
 
-const POPOUT_ID = 'nad-char-profile';
-const TOGGLE_ID = 'nad-char-profile-toggle';
-const STORAGE_KEY = 'nad-char-profile-open';
+const PANEL_ID = 'nad-char-profile';
 
 let popoutEl = null;
-let toggleEl = null;
-let isOpen = false;
 let enabled = true;
 let unshallowing = false;
 
@@ -171,7 +169,6 @@ function renderProfile(character) {
 
     popoutEl.innerHTML = `
         <div class="nad-profile-banner"></div>
-        <div class="nad-profile-close" title="Close"><i class="fa-solid fa-xmark"></i></div>
         <div class="nad-profile-header">
             <div class="nad-profile-avatar">
                 <img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(name)}" />
@@ -225,88 +222,19 @@ function refreshProfile() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Open / close                                                       */
-/* ------------------------------------------------------------------ */
-
-function openProfile() {
-    if (!popoutEl || !enabled) return;
-    isOpen = true;
-    popoutEl.classList.add('nad-profile-open');
-    toggleEl?.classList.add('nad-profile-toggle-active');
-    refreshProfile();
-    try { localStorage.setItem(STORAGE_KEY, '1'); } catch (e) { /* ignore */ }
-}
-
-function closeProfile() {
-    if (!popoutEl) return;
-    isOpen = false;
-    popoutEl.classList.remove('nad-profile-open');
-    toggleEl?.classList.remove('nad-profile-toggle-active');
-    try { localStorage.setItem(STORAGE_KEY, '0'); } catch (e) { /* ignore */ }
-}
-
-function toggleProfile() {
-    if (isOpen) {
-        closeProfile();
-    } else {
-        openProfile();
-    }
-}
-
-function onDocumentClick(event) {
-    if (!isOpen) return;
-    if (popoutEl && popoutEl.contains(event.target)) return;
-    if (toggleEl && toggleEl.contains(event.target)) return;
-    closeProfile();
-}
-
-/* ------------------------------------------------------------------ */
 /*  DOM construction                                                   */
 /* ------------------------------------------------------------------ */
 
-function createToggle() {
-    if (document.getElementById(TOGGLE_ID)) {
-        toggleEl = document.getElementById(TOGGLE_ID);
-        return;
-    }
-
-    const holder = document.getElementById('top-settings-holder');
-    if (!holder) return;
-
-    toggleEl = document.createElement('div');
-    toggleEl.id = TOGGLE_ID;
-    toggleEl.className = 'nad-profile-toggle';
-    toggleEl.title = 'Character Profile';
-    toggleEl.setAttribute('tabindex', '0');
-    toggleEl.innerHTML = '<div class="drawer-icon fa-solid fa-id-card"></div>';
-    toggleEl.addEventListener('click', (event) => {
-        event.stopPropagation();
-        toggleProfile();
-    });
-    toggleEl.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            toggleProfile();
-        }
-    });
-
-    holder.appendChild(toggleEl);
-}
-
-function createPopout() {
-    if (document.getElementById(POPOUT_ID)) {
-        popoutEl = document.getElementById(POPOUT_ID);
+function createPanel() {
+    if (document.getElementById(PANEL_ID)) {
+        popoutEl = document.getElementById(PANEL_ID);
         return;
     }
 
     popoutEl = document.createElement('div');
-    popoutEl.id = POPOUT_ID;
+    popoutEl.id = PANEL_ID;
     popoutEl.className = 'nad-profile-popout';
     popoutEl.addEventListener('click', (event) => {
-        if (event.target.closest('.nad-profile-close')) {
-            closeProfile();
-            return;
-        }
         if (event.target.closest('#nad-profile-focus-chat')) {
             document.getElementById('send_textarea')?.focus();
         }
@@ -336,33 +264,6 @@ function bindEvents() {
             eventSource.on(type, refresh);
         }
     });
-
-    document.addEventListener('click', onDocumentClick);
-
-    // Re-attach the toggle if SillyTavern re-renders the nav rail.
-    // Debounced so it stays cheap during frequent DOM updates (e.g. streaming).
-    let reattachScheduled = false;
-    const observer = new MutationObserver(() => {
-        if (reattachScheduled) return;
-        reattachScheduled = true;
-        requestAnimationFrame(() => {
-            reattachScheduled = false;
-            if (!document.getElementById(TOGGLE_ID)) {
-                createToggle();
-            }
-        });
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-}
-
-function restoreState() {
-    let saved = null;
-    try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) { /* ignore */ }
-
-    // Default to open on first run so the feature is discoverable.
-    if (saved === null || saved === '1') {
-        openProfile();
-    }
 }
 
 /* ------------------------------------------------------------------ */
@@ -370,21 +271,19 @@ function restoreState() {
 /* ------------------------------------------------------------------ */
 
 export function initCharacterProfile() {
-    createToggle();
-    createPopout();
+    createPanel();
     bindEvents();
-    restoreState();
+    setCharacterProfileEnabled(enabled);
     refreshProfile();
 }
 
 export function setCharacterProfileEnabled(value) {
     enabled = !!value;
 
-    if (toggleEl) {
-        toggleEl.style.display = enabled ? '' : 'none';
-    }
+    // The CSS reserves layout space only while this class is present.
+    document.body.classList.toggle('nad-profile-enabled', enabled);
 
-    if (!enabled) {
-        closeProfile();
+    if (popoutEl) {
+        popoutEl.style.display = enabled ? '' : 'none';
     }
 }
