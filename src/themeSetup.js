@@ -6,6 +6,7 @@ import { positionAnchor } from './positionAnchor.js';
 import { drawerClickOverride } from './drawerClickOverride.js';
 import { checkTheme, resetMovablePanels } from './checkTheme.js';
 import { drawerStyleChangeOverride} from './chatStyle.js';
+import { initCharacterProfile, setCharacterProfileEnabled } from './characterProfile.js';
 import ThemeSettingsManager from './themeSettingsManager.js';
 
 export class ThemeSetup {
@@ -153,6 +154,14 @@ export class ThemeSetup {
                 "controlType": "js" 
             },
             {
+                "type": "checkbox",
+                "varId": "enable-char-profile",
+                "displayText": "Character Profile Popout",
+                "default": true,
+                "group": "Behavior",
+                "controlType": "js"
+            },
+            {
                 "type": "color",
                 "varId": "NSDAccentColor",
                 "displayText": "Accent Color",
@@ -264,6 +273,10 @@ export class ThemeSetup {
 
         this.themeManager.registerCallback('enable-autoHideCharFilter', (value, oldValue, varId) => {
             this.setAutoHideCharFilter(value);
+        });
+
+        this.themeManager.registerCallback('enable-char-profile', (value, oldValue, varId) => {
+            setCharacterProfileEnabled(value);
         });
 
 
@@ -392,6 +405,8 @@ export class ThemeSetup {
             drawerClickOverride();
 
             checkTheme();
+
+            initCharacterProfile();
 
             this.addThemeSettings();
 

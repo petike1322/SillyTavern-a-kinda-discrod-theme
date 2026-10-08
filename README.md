@@ -26,6 +26,11 @@ You will need:
   box** and **per-group reset** buttons.
 - **New settings** — Accent Color, Corner Roundness, Interface Density (Comfortable /
   Compact), and Overlay Panels.
+- **Character Profile Popout** — a Discord-style "user profile" card for the current
+  character, docked to the left side of the screen. Shows the character's banner, avatar,
+  name, description, personality, scenario, creator/version and tags. Toggle it from the
+  **id-card icon** in the left nav rail, or disable it entirely via the
+  **Character Profile Popout** setting.
 
 All existing settings and CSS variables are preserved, so your saved configuration keeps
 working after upgrading.

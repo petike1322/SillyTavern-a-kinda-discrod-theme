@@ -2808,6 +2808,277 @@ body.nad-density-compact .mes {
     padding-bottom: 2px !important;
 }
 
+/* ============================================================
+   NAD v2 — Discord-style Character Profile Popout (left side)
+   ============================================================ */
+
+.nad-profile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: var(--nad-radius-md);
+    transition: background-color var(--nad-duration-fast) var(--nad-ease);
+}
+
+.nad-profile-toggle:hover {
+    background-color: var(--nad-glass-highlight);
+}
+
+.nad-profile-toggle-active {
+    background-color: var(--nad-accent-soft);
+}
+
+.nad-profile-toggle-active .drawer-icon {
+    color: var(--nad-accent) !important;
+    opacity: 1;
+}
+
+.nad-profile-popout {
+    position: fixed;
+    top: 4px;
+    left: calc(var(--nav-bar-width, 48px) + var(--char-panel-width, 0px));
+    width: 340px;
+    max-width: calc(100vw - var(--nav-bar-width, 48px) - var(--char-panel-width, 0px) - 8px);
+    max-height: calc(100dvh - 8px);
+    display: flex;
+    flex-direction: column;
+    background-color: var(--nad-surface-2);
+    backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
+    border: 1px solid var(--nad-glass-border);
+    border-radius: var(--nad-radius-lg);
+    box-shadow: var(--nad-shadow-3);
+    overflow: hidden;
+    z-index: 60;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-16px);
+    transition:
+        opacity var(--nad-duration-base) var(--nad-ease-out),
+        transform var(--nad-duration-base) var(--nad-ease-out),
+        visibility var(--nad-duration-base);
+}
+
+.nad-profile-popout.nad-profile-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.nad-profile-banner {
+    position: relative;
+    height: 96px;
+    flex-shrink: 0;
+    background-color: var(--nad-surface-4);
+    background-image: var(--nad-profile-banner);
+    background-size: cover;
+    background-position: center;
+}
+
+.nad-profile-banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, var(--nad-surface-2) 100%);
+}
+
+.nad-profile-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--nad-radius-pill);
+    background-color: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    cursor: pointer;
+    z-index: 2;
+    transition: background-color var(--nad-duration-fast) var(--nad-ease);
+}
+
+.nad-profile-close:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.nad-profile-header {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: var(--nad-space-3);
+    padding: 0 var(--nad-space-4);
+    margin-top: -36px;
+    z-index: 1;
+}
+
+.nad-profile-avatar {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    border-radius: var(--nad-radius-pill);
+    border: 4px solid var(--nad-surface-2);
+    background-color: var(--nad-surface-4);
+    overflow: visible;
+}
+
+.nad-profile-avatar > img {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--nad-radius-pill);
+    object-fit: cover;
+    display: block;
+}
+
+.nad-profile-status {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: var(--nad-radius-pill);
+    background-color: #3ba55d;
+    border: 3px solid var(--nad-surface-2);
+}
+
+.nad-profile-names {
+    padding-bottom: var(--nad-space-2);
+    min-width: 0;
+}
+
+.nad-profile-displayname {
+    font-size: var(--nad-font-lg);
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nad-profile-username {
+    font-size: var(--nad-font-sm);
+    opacity: 0.65;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nad-profile-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: var(--nad-space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--nad-space-4);
+}
+
+.nad-profile-section-title {
+    font-size: var(--nad-font-xs);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: var(--nad-space-1);
+}
+
+.nad-profile-section-body {
+    font-size: var(--nad-font-sm);
+    line-height: var(--nad-line-height);
+    opacity: 0.92;
+    word-break: break-word;
+}
+
+.nad-profile-section-body img {
+    max-width: 100%;
+    border-radius: var(--nad-radius-sm);
+}
+
+.nad-profile-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--nad-space-1);
+}
+
+.nad-profile-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--nad-space-2);
+    font-size: var(--nad-font-sm);
+}
+
+.nad-profile-meta-row > span {
+    opacity: 0.6;
+}
+
+.nad-profile-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--nad-space-1);
+}
+
+.nad-profile-tag {
+    font-size: var(--nad-font-xs);
+    padding: 2px 8px;
+    border-radius: var(--nad-radius-pill);
+    background-color: var(--nad-accent-soft);
+    color: var(--nad-accent);
+    border: 1px solid color-mix(in srgb, var(--nad-accent) 30%, transparent);
+}
+
+.nad-profile-footer {
+    flex-shrink: 0;
+    padding: var(--nad-space-3) var(--nad-space-4);
+    border-top: 1px solid var(--nad-glass-border);
+    background-color: var(--nad-surface-4);
+}
+
+.nad-profile-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--nad-space-2);
+    padding: var(--nad-control-padding-y) var(--nad-control-padding-x);
+    border-radius: var(--nad-radius-md);
+    background-color: var(--nad-accent);
+    color: var(--nad-accent-contrast);
+    font-size: var(--nad-font-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--nad-duration-fast) var(--nad-ease);
+}
+
+.nad-profile-action:hover {
+    background-color: var(--nad-accent-hover);
+}
+
+.nad-profile-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--nad-space-2);
+    height: 100%;
+    opacity: 0.5;
+    font-size: var(--nad-font-sm);
+}
+
+.nad-profile-empty > i {
+    font-size: 2rem;
+}
+
+/* On small screens the popout takes over the full width. */
+@media screen and (max-width: 1000px) {
+    .nad-profile-popout {
+        left: var(--nav-bar-width);
+        width: calc(100vw - var(--nav-bar-width) - 8px);
+        max-width: calc(100vw - var(--nav-bar-width) - 8px);
+    }
+}
+
 .ts-drawer-content {
     position: fixed;
     padding: 10px;
