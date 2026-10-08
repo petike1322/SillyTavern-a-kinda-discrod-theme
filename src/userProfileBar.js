@@ -62,9 +62,6 @@ function createUserProfileBar() {
         <i class="nad-user-profile-menu fa-solid fa-ellipsis" aria-hidden="true"></i>`;
 
     barEl.addEventListener('click', (event) => {
-        const drawer = document.querySelector('#persona-management-button .drawer-content');
-        if (drawer?.classList.contains('openDrawer')) return;
-
         event.preventDefault();
         event.stopPropagation();
         const toggle = document.querySelector('#persona-management-button > .drawer-toggle');
@@ -86,6 +83,7 @@ function bindEvents() {
 
 export function initUserProfileBar() {
     createUserProfileBar();
+    document.querySelector('#persona-management-button .drawer-content')?.classList.add('pinnedOpen');
     bindEvents();
     refreshUserProfile();
 
