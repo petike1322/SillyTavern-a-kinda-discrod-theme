@@ -14,6 +14,14 @@ export class ThemeSetup {
        
         this.themeEntries = [
             {
+                "type": "checkbox",
+                "varId": "overlayPanels",
+                "displayText": "Overlay Panels (float over chat)",
+                "default": true,
+                "group": "Layout",
+                "controlType": "js"
+            },
+            {
                 "type": "slider",
                 "varId": "NSDlistGrid-char-panel-width",
                 "displayText": "Grid Char Panel Width",
@@ -21,6 +29,7 @@ export class ThemeSetup {
                 "min": 240,
                 "max": 740,
                 "step": 1,
+                "group": "Layout",
                 "controlType": "css"
             },
             {
@@ -31,6 +40,7 @@ export class ThemeSetup {
                 "min": 240,
                 "max": 740,
                 "step": 1,
+                "group": "Layout",
                 "controlType": "css"
             },
             {
@@ -41,6 +51,30 @@ export class ThemeSetup {
                 "min": 200,
                 "max": 600,
                 "step": 1,
+                "group": "Layout",
+                "controlType": "css"
+            },
+            {
+                "type": "select",
+                "varId": "NSDDensity",
+                "displayText": "Interface Density",
+                "default": "comfortable",
+                "options": [
+                    { "label": "Comfortable", "value": "comfortable" },
+                    { "label": "Compact", "value": "compact" }
+                ],
+                "group": "Layout",
+                "controlType": "js"
+            },
+            {
+                "type": "slider",
+                "varId": "NSDRadiusScale",
+                "displayText": "Corner Roundness",
+                "default": "1",
+                "min": 0,
+                "max": 2,
+                "step": 0.1,
+                "group": "Appearance",
                 "controlType": "css"
             },
             {
@@ -51,6 +85,7 @@ export class ThemeSetup {
                 "min": 8,
                 "max": 36,
                 "step": 1,
+                "group": "Chat",
                 "controlType": "css"
             },
             {
@@ -61,6 +96,7 @@ export class ThemeSetup {
                 "min": 0,
                 "max": 0.99,
                 "step": 0.01,
+                "group": "Avatars",
                 "controlType": "css"
             },
             {
@@ -71,6 +107,7 @@ export class ThemeSetup {
                 "min": 0,
                 "max": 1,
                 "step": 0.01,
+                "group": "Appearance",
                 "controlType": "css"
             },
             {
@@ -88,6 +125,7 @@ export class ThemeSetup {
                     { "label": "8x7", "value": "8x7" }
 
                 ],
+                "group": "Avatars",
                 "controlType": "js" 
             },
             {
@@ -95,6 +133,7 @@ export class ThemeSetup {
                 "varId": "chatBubbleBigAvatarHeight",
                 "displayText": "Chat Bubble as Big Avatar Height",
                 "default": false,
+                "group": "Avatars",
                 "controlType": "js" 
             },
             {
@@ -102,6 +141,7 @@ export class ThemeSetup {
                 "varId": "enable-animations",
                 "displayText": "Enable Some Animations",
                 "default": false,
+                "group": "Behavior",
                 "controlType": "js" 
             },
             {
@@ -109,13 +149,23 @@ export class ThemeSetup {
                 "varId": "enable-autoHideCharFilter",
                 "displayText": "Auto Hide Filter/Search Block",
                 "default": false,
+                "group": "Behavior",
                 "controlType": "js" 
+            },
+            {
+                "type": "color",
+                "varId": "NSDAccentColor",
+                "displayText": "Accent Color",
+                "default": "rgba(88, 101, 242, 1)",
+                "group": "Colors",
+                "controlType": "css"
             },
             {
                 "type": "color",
                 "varId": "NSDbig_side-avatars-Color",
                 "displayText": "Text on avatar Color",
                 "default": "rgba(214, 214, 214, 1)",
+                "group": "Colors",
                 "controlType": "css"
             },
             {
@@ -123,6 +173,7 @@ export class ThemeSetup {
                 "varId": "NSDThemeBG1Color",
                 "displayText": "Drawer BG Color",
                 "default": "rgba(26, 26, 30, 1)",
+                "group": "Colors",
                 "controlType": "css"
             },
             {
@@ -130,6 +181,7 @@ export class ThemeSetup {
                 "varId": "NSDThemeBG4Color",
                 "displayText": "Secondary Theme Color",
                 "default": "rgba(32, 32, 36, 1)",
+                "group": "Colors",
                 "controlType": "css"
             },
             {
@@ -137,6 +189,7 @@ export class ThemeSetup {
                 "varId": "NSDThemeBG2Color",
                 "displayText": "Option Popup BG Color",
                 "default": "rgba(40, 40, 45, 1)",
+                "group": "Colors",
                 "controlType": "css"
             },
             {
@@ -144,6 +197,7 @@ export class ThemeSetup {
                 "varId": "NSDThemeBG3Color",
                 "displayText": "Send Form BG Color",
                 "default": "rgba(34, 35, 39, 1)",
+                "group": "Colors",
                 "controlType": "css"
             },
             {
@@ -151,6 +205,7 @@ export class ThemeSetup {
                 "varId": "NSDDrawer-IconColor",
                 "displayText": "Drawer Icon Color",
                 "default": "rgba(237, 237, 237, 1)",
+                "group": "Colors",
                 "controlType": "css"
             },
             /*{
@@ -187,6 +242,14 @@ export class ThemeSetup {
 
     registerCallbacks() {
 
+        this.themeManager.registerCallback('overlayPanels', (value, oldValue, varId) => {
+            this.toggleOverlayPanels(value);
+        });
+
+        this.themeManager.registerCallback('NSDDensity', (value, oldValue, varId) => {
+            this.setDensity(value);
+        });
+
         this.themeManager.registerCallback('enable-animations', (value, oldValue, varId) => {
             this.toggleAnimations(value);
         });
@@ -213,6 +276,18 @@ export class ThemeSetup {
         });
     }
     
+    toggleOverlayPanels(enabled) {
+        console.log(`[NADTheme] Overlay panels ${enabled ? 'enabled' : 'disabled'}`);
+        document.body.classList.toggle('nad-overlay-panels', !!enabled);
+    }
+
+    setDensity(density) {
+        const compact = density === 'compact';
+        document.body.classList.toggle('nad-density-compact', compact);
+        document.documentElement.style.setProperty('--nad-density', compact ? '0.85' : '1');
+        console.log(`[NADTheme] Density set to ${density}`);
+    }
+
     toggleAnimations(enabled) {
         console.log(`[NADTheme] jQuery.fx.off Animations ${enabled ? 'enabled' : 'disabled'}`);
         

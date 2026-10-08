@@ -17,6 +17,81 @@ MIT License
 */
 :root {
 
+  /* ============================================================
+     NAD Design Tokens (v2 "Glass" layer)
+     ------------------------------------------------------------
+     A modern token layer consumed by the rest of the theme.
+     Existing --NSD* variables are preserved and mapped onto these
+     tokens, so saved user settings keep working unchanged.
+     ============================================================ */
+
+  /* --- Accent --- */
+  --nad-accent: var(--NSDAccentColor, var(--SmartThemeUnderlineColor, #5865f2));
+  --nad-accent-hover: color-mix(in srgb, var(--nad-accent) 88%, white);
+  --nad-accent-active: color-mix(in srgb, var(--nad-accent) 88%, black);
+  --nad-accent-soft: color-mix(in srgb, var(--nad-accent) 18%, transparent);
+  --nad-accent-contrast: #ffffff;
+
+  /* --- Glass surfaces --- */
+  --nad-glass-alpha: 0.72;
+  --nad-glass-alpha-strong: 0.86;
+  --nad-glass-alpha-subtle: 0.55;
+  --nad-glass-alpha-pct: 72%;
+  --nad-glass-alpha-strong-pct: 86%;
+  --nad-glass-alpha-subtle-pct: 55%;
+  --nad-glass-blur: 14px;
+  --nad-glass-blur-strong: 22px;
+  --nad-glass-saturate: 140%;
+  --nad-glass-border: color-mix(in srgb, #ffffff 9%, transparent);
+  --nad-glass-border-strong: color-mix(in srgb, #ffffff 16%, transparent);
+  --nad-glass-highlight: color-mix(in srgb, #ffffff 7%, transparent);
+
+  /* --- Radii --- */
+  --nad-radius-scale: var(--NSDRadiusScale, 1);
+  --nad-radius-xs: calc(4px * var(--nad-radius-scale));
+  --nad-radius-sm: calc(6px * var(--nad-radius-scale));
+  --nad-radius-md: calc(8px * var(--nad-radius-scale));
+  --nad-radius-lg: calc(12px * var(--nad-radius-scale));
+  --nad-radius-xl: calc(16px * var(--nad-radius-scale));
+  --nad-radius-pill: 999px;
+
+  /* --- Elevation --- */
+  --nad-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.28);
+  --nad-shadow-2: 0 6px 20px rgba(0, 0, 0, 0.34);
+  --nad-shadow-3: 0 16px 44px rgba(0, 0, 0, 0.46);
+
+  /* --- Spacing --- */
+  --nad-space-1: 4px;
+  --nad-space-2: 8px;
+  --nad-space-3: 12px;
+  --nad-space-4: 16px;
+  --nad-space-5: 24px;
+  --nad-space-6: 32px;
+
+  /* --- Typography --- */
+  --nad-font-xs: calc(var(--mainFontSize, 15px) * 0.75);
+  --nad-font-sm: calc(var(--mainFontSize, 15px) * 0.85);
+  --nad-font-md: var(--mainFontSize, 15px);
+  --nad-font-lg: calc(var(--mainFontSize, 15px) * 1.15);
+  --nad-font-xl: calc(var(--mainFontSize, 15px) * 1.4);
+  --nad-line-height: 1.5;
+
+  /* --- Motion --- */
+  --nad-duration-fast: 120ms;
+  --nad-duration-base: 200ms;
+  --nad-duration-slow: 320ms;
+  --nad-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --nad-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* --- Focus --- */
+  --nad-focus-ring: 0 0 0 2px color-mix(in srgb, var(--nad-accent) 70%, transparent);
+
+  /* --- Density --- */
+  --nad-density: 1;
+  --nad-control-height: calc(34px * var(--nad-density));
+  --nad-control-padding-y: calc(6px * var(--nad-density));
+  --nad-control-padding-x: calc(10px * var(--nad-density));
+
   --NSDlistGrid-char-panel-width: 580;
   --NSDnormal-char-panel-width: 420;
   --NSDpanel-base-width: 380;
@@ -39,6 +114,17 @@ MIT License
   --NSDbig_side-avatars-Color: rgba(214, 214, 214, 1);
 
   --NSDTheme1Color: rgba(102, 103, 113, 1);
+
+  /* --- Surface mapping: --NSD* tints -> glass surfaces --- */
+  --nad-surface-1: color-mix(in srgb, var(--NSDThemeBG1Color) var(--nad-glass-alpha-pct), transparent);
+  --nad-surface-2: color-mix(in srgb, var(--NSDThemeBG2Color) var(--nad-glass-alpha-strong-pct), transparent);
+  --nad-surface-3: color-mix(in srgb, var(--NSDThemeBG3Color) var(--nad-glass-alpha-strong-pct), transparent);
+  --nad-surface-4: color-mix(in srgb, var(--NSDThemeBG4Color) var(--nad-glass-alpha-pct), transparent);
+  --nad-surface-subtle: color-mix(in srgb, var(--NSDThemeBG4Color) var(--nad-glass-alpha-subtle-pct), transparent);
+  --nad-surface-solid: var(--NSDThemeBG1Color);
+  --nad-surface-solid-2: var(--NSDThemeBG2Color);
+  --nad-surface-solid-3: var(--NSDThemeBG3Color);
+  --nad-surface-solid-4: var(--NSDThemeBG4Color);
 
   --NSDMesFontScale: 1;
   --NSDMesFontSize: calc(var(--fontScale) * 15px);
@@ -93,16 +179,16 @@ MIT License
 
 body:has(#bg1) {
   --lat--color-accent: var(--white50a) !important;
-  --lat--color-bgSecondary: var(--SmartThemeBlurTintColor) !important;
-  --stqrd--color-borderSecondary: var(--SmartThemeBorderColor) !important;
-  --stqrd--color-bgPrimary: var(--NSDThemeBG4Color) !important;
-  --secondaryBg : var(--NSDThemeBG2Color) !important;
+  --lat--color-bgSecondary: var(--nad-surface-1) !important;
+  --stqrd--color-borderSecondary: var(--nad-glass-border) !important;
+  --stqrd--color-bgPrimary: var(--nad-surface-4) !important;
+  --secondaryBg : var(--nad-surface-2) !important;
   
 /*
   scrollbar-width: thin;
   scrollbar-color: #666771 var(--SmartThemeBlurTintColor) !important;*/
 
-  background-color: var(--SmartThemeBlurTintColor);
+  background-color: var(--nad-surface-solid);
   display: flex;
 
   
@@ -183,10 +269,24 @@ body:has(#bg1) {
 
   --elements-height: 100vh;
 
-  --center-panels-width: calc(100vw - var(--nav-bar-width) - var(--panels-total-width) - var(--char-panel-width));
-  --chat-panel-width: calc(var(--center-panels-width) - var(--expression-image-lorebook-width));
+  /*
+    Overlay mode: secondary right-side panels float above the chat
+    instead of reserving layout space. 1 = push (legacy), 0 = overlay.
+    Toggled by the "Overlay Panels" theme setting via body.nad-overlay-panels.
+  */
+  --panels-push-factor: 1;
+  --panels-reserved-width: calc(var(--panels-total-width) * var(--panels-push-factor));
+  --expression-reserved-width: calc(var(--expression-image-lorebook-width) * var(--panels-push-factor));
+
+  --center-panels-width: calc(100vw - var(--nav-bar-width) - var(--panels-reserved-width) - var(--char-panel-width));
+  --chat-panel-width: calc(var(--center-panels-width) - var(--expression-reserved-width));
   --chat-panel-left-offset: calc(var(--nav-bar-width) + var(--char-panel-width));
 
+}
+
+/* Overlay mode: panels no longer reserve horizontal space. */
+body.nad-overlay-panels {
+  --panels-push-factor: 0;
 }
 
 body.charListGrid:has(#right-nav-panel.openDrawer):not(#rm_ch_create_block) {
@@ -350,14 +450,14 @@ body:has(#gallery.draggable) {
 /*1*/
 #left-nav-panel.drawer-content {
   right: 0 !important;
-  background-color: var(--SmartThemeChatTintColor) !important;
+  background-color: var(--nad-surface-1) !important;
   padding: 0;
 }
 
 /*2*/
 #floatingPrompt:not(.maximized) {
   right: var(--panel-notes-offset) !important;
-  background-color: var(--SmartThemeChatTintColor) !important;
+  background-color: var(--nad-surface-1) !important;
 }
 
 /*3*/
@@ -395,7 +495,7 @@ body:has(#gallery.draggable) {
 /*8*/
 #cfgConfig {
   right: var(--panel-cfg-offset) !important;
-  background-color: var(--SmartThemeChatTintColor) !important;
+  background-color: var(--nad-surface-1) !important;
 }
 
 /*9*/
@@ -420,13 +520,13 @@ body:has(#gallery.draggable) {
   right: var(--panel-lvm-offset) !important;
   position: fixed;
   gap: 5px;
-  background-color: var(--SmartThemeChatTintColor) !important;
+  background-color: var(--nad-surface-1) !important;
 }
 
 /*13*/
 #movingDivs > #ctsi-drawer {
   right: var(--panel-ctsi-offset) !important;
-  background-color: var(--SmartThemeChatTintColor) !important;
+  background-color: var(--nad-surface-1) !important;
   filter: unset;
   transition: none;
 }
@@ -434,36 +534,149 @@ body:has(#gallery.draggable) {
 /*14*/
 #movingDivs > #ts-drawer {
   right: var(--panel-ts-offset) !important;
-  background-color: var(--SmartThemeChatTintColor) !important;
+  background-color: var(--nad-surface-1) !important;
   filter: unset;
   transition: none;
 }
 /*15*/
 #vv--root {
   right: var(--panel-vv-offset) !important;
-  background-color: var(--SmartThemeChatTintColor) !important;
+  background-color: var(--nad-surface-1) !important;
   border: unset !important;
 }
 
 /*16*/
 #notebookPanel {
   right: var(--panel-notebook-offset) !important;
-  background-color: var(--SmartThemeChatTintColor) !important;
+  background-color: var(--nad-surface-1) !important;
 }
 
 /*17*/
 .stcdx--root {
   right: var(--panel-codex-offset) !important;
-  background-color: var(--SmartThemeChatTintColor) !important;
-  border-top: 1px solid var(--SmartThemeBorderColor) !important;
-  border-left: 1px solid var(--SmartThemeBorderColor) !important;
+  background-color: var(--nad-surface-1) !important;
+  border-top: 1px solid var(--nad-glass-border) !important;
+  border-left: 1px solid var(--nad-glass-border) !important;
   border-bottom: unset !important;
   border-right: unset !important;
 }
 /*18*/
 #logprobsViewer:not(.maximized) {
   right: var(--panel-logprobs-offset) !important;
-  background-color: var(--SmartThemeChatTintColor) !important;
+  background-color: var(--nad-surface-1) !important;
+}
+
+/* ============================================================
+   Overlay mode — secondary panels float as frosted glass cards
+   ============================================================ */
+body.nad-overlay-panels #logprobsViewer:not(.maximized),
+body.nad-overlay-panels #floatingPrompt:not(.maximized),
+body.nad-overlay-panels #gallery,
+body.nad-overlay-panels #summaryExtensionPopout,
+body.nad-overlay-panels #groupMemberListPopout,
+body.nad-overlay-panels #trackerInterface,
+body.nad-overlay-panels #trackerUI,
+body.nad-overlay-panels #cfgConfig,
+body.nad-overlay-panels #objectiveExtensionPopout,
+body.nad-overlay-panels #injectManagerSideBar,
+body.nad-overlay-panels #extensionSideBar,
+body.nad-overlay-panels #lvm--root,
+body.nad-overlay-panels #movingDivs > #ctsi-drawer,
+body.nad-overlay-panels #movingDivs > #ts-drawer,
+body.nad-overlay-panels #vv--root,
+body.nad-overlay-panels #notebookPanel,
+body.nad-overlay-panels .stcdx--root,
+body.nad-overlay-panels #left-nav-panel.drawer-content {
+  background-color: var(--nad-surface-2) !important;
+  backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
+  border: 1px solid var(--nad-glass-border) !important;
+  border-radius: var(--nad-radius-lg) !important;
+  box-shadow: var(--nad-shadow-2) !important;
+  margin: 4px !important;
+  height: calc(var(--elements-height) - 8px) !important;
+  animation: nad-panel-in var(--nad-duration-base) var(--nad-ease-out);
+}
+
+/* Keep the tiling offsets working in overlay mode. */
+body.nad-overlay-panels #floatingPrompt:not(.maximized) {
+  right: calc(var(--panel-notes-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #gallery {
+  right: calc(var(--panel-gallery-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #summaryExtensionPopout {
+  right: calc(var(--panel-summary-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #groupMemberListPopout {
+  right: calc(var(--panel-members-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #trackerInterface,
+body.nad-overlay-panels #trackerUI {
+  right: calc(var(--panel-tracker-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #cfgConfig {
+  right: calc(var(--panel-cfg-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #objectiveExtensionPopout {
+  right: calc(var(--panel-objective-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #injectManagerSideBar {
+  right: calc(var(--panel-inject-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #extensionSideBar {
+  right: calc(var(--panel-extension-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #lvm--root {
+  right: calc(var(--panel-lvm-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #movingDivs > #ctsi-drawer {
+  right: calc(var(--panel-ctsi-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #movingDivs > #ts-drawer {
+  right: calc(var(--panel-ts-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #vv--root {
+  right: calc(var(--panel-vv-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #notebookPanel {
+  right: calc(var(--panel-notebook-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels .stcdx--root {
+  right: calc(var(--panel-codex-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #logprobsViewer:not(.maximized) {
+  right: calc(var(--panel-logprobs-offset) + 4px) !important;
+}
+
+body.nad-overlay-panels #left-nav-panel.drawer-content {
+  right: 4px !important;
+}
+
+@keyframes nad-panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /*19*/
@@ -472,6 +685,12 @@ body:has(#gallery.draggable) {
 #WorldInfo,
 #expression-wrapper,
 .zoomed_avatar {
+  /*
+    The "expression slot" group always sits immediately to the LEFT of the
+    tiled secondary panels. In push mode that places it beside the chat;
+    in overlay mode it floats over the chat's right edge, still clear of
+    the tiled panels.
+  */
   right: var(--panels-total-width) !important;
   text-shadow: unset !important;
 }
@@ -526,8 +745,8 @@ body:has(#gallery.draggable) {
 #stqrd--drawer-v2,
 #WorldInfo {
   width: calc(var(--expression-image-lorebook-width) - 8px) !important;
-  border-radius: 8px 0 0 8px !important;
-  border-top: 1px solid var(--SmartThemeBorderColor) !important;
+  border-radius: var(--nad-radius-md) 0 0 var(--nad-radius-md) !important;
+  border-top: 1px solid var(--nad-glass-border) !important;
   border-right: unset !important;
 }
 
@@ -536,15 +755,17 @@ body:has(#gallery.draggable) {
 
 
 .drawer-content {
-  background-color: var(--NSDThemeBG1Color) !important;
+  background-color: var(--nad-surface-1) !important;
+  backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
   width: var(--chat-panel-width);
   left: var(--chat-panel-left-offset);
   border: unset;
   margin: 0 !important;
   border-radius: 0px;
-  border-top-right-radius: 8px !important;
-  border-top-left-radius: 8px !important;
-  border-bottom-right-radius: 8px !important;
+  border-top-right-radius: var(--nad-radius-lg) !important;
+  border-top-left-radius: var(--nad-radius-lg) !important;
+  border-bottom-right-radius: var(--nad-radius-lg) !important;
   z-index: 20 !important;
   top: 4px;
   bottom: 0;
@@ -583,14 +804,14 @@ body.waifuMode .zoomed_avatar {
 {
   height: 100vh !important;
   margin: 4px 0 0 0 !important;
-  border-radius: 8px!important;
+  border-radius: var(--nad-radius-lg)!important;
   left: var(--chat-panel-left-offset) !important;
 }
 
 #sheld {
   height: 100vh !important;
   margin: 4px 0 0 0px !important;
-  border-radius: 8px 0px 0 0 !important;
+  border-radius: var(--nad-radius-lg) 0px 0 0 !important;
   left: var(--chat-panel-left-offset) !important;
   z-index: 25 !important;
 }
@@ -600,7 +821,7 @@ body.waifuMode .zoomed_avatar {
   overflow: hidden !important;
   border: 0px !important;
   background-position: center;
-  background-color: var(--SmartThemeBlurTintColor);
+  background-color: var(--nad-surface-solid);
   border-color: transparent !important;
   border-style: solid !important;
   margin: 0 0 0 0 !important;
@@ -620,11 +841,13 @@ body.waifuMode .zoomed_avatar {
 
 #right-nav-panel {
 
-  background-color: var(--SmartThemeBlurTintColor) !important;
-  border-top-left-radius: 12px !important;
+  background-color: var(--nad-surface-1) !important;
+  backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  border-top-left-radius: var(--nad-radius-lg) !important;
   border-top-right-radius: 0px !important;
-  border-left: 1px solid var(--SmartThemeBorderColor) !important;
-  border-top: 1px solid var(--SmartThemeBorderColor) !important;
+  border-left: 1px solid var(--nad-glass-border) !important;
+  border-top: 1px solid var(--nad-glass-border) !important;
   left: var(--nav-bar-width);
   width: var(--char-panel-width);
   height: calc(100svh);
@@ -645,7 +868,7 @@ body.waifuMode .zoomed_avatar {
 #notebookPanel.maximized {
   margin: 0 !important;
   right: 0;
-  border: 1px solid var(--SmartThemeBorderColor) !important;
+  border: 1px solid var(--nad-glass-border) !important;
   z-index: 90 !important;
   width: var(--chat-panel-width) !important;
   left: var(--chat-panel-left-offset);
@@ -669,7 +892,7 @@ body.waifuMode .zoomed_avatar {
     height: 100%;
     z-index: 500;
     background: transparent;
-    transition: background-color 0.2s;
+    transition: background-color var(--nad-duration-base) var(--nad-ease);
     pointer-events: auto;
     left: calc(var(--nav-bar-width) + var(--char-panel-width) + var(--chat-panel-width));
     
@@ -679,7 +902,7 @@ body.waifuMode .zoomed_avatar {
     position: absolute;
     transform: translateY(-50%);
     width: 8px;
-    background: var(--SmartThemeBorderColor);
+    background: var(--nad-glass-border-strong);
     left: calc(var(--nav-bar-width) + var(--char-panel-width) + var(--chat-panel-width));
     opacity: 0.5;
 }
@@ -735,8 +958,8 @@ textarea {
 }
 
 #chat {
-  border-top: 1px solid var(--SmartThemeBorderColor) !important;
-  border-left: 1px solid var(--SmartThemeBorderColor) !important;
+  border-top: 1px solid var(--nad-glass-border) !important;
+  border-left: 1px solid var(--nad-glass-border) !important;
 }
 
 .popup-body,
@@ -792,7 +1015,7 @@ hr {
 
 #WorldInfo .flex-container.alignitemscenter.gap10px {
   padding: 8px !important;
-  border-bottom: 1px solid var(--SmartThemeBorderColor) !important;
+  border-bottom: 1px solid var(--nad-glass-border) !important;
   min-height: 48px !important;
 }
 
@@ -838,9 +1061,21 @@ span {
 
 input,
 select {
-  border: 1px solid color-mix(in srgb, var(--SmartThemeBorderColor) 50%, transparent) !important;
+  border: 1px solid var(--nad-glass-border) !important;
   font-size: calc(var(--mainFontSize) * 0.9) !important;
-  padding: 6px 8px !important;
+  padding: var(--nad-control-padding-y) var(--nad-control-padding-x) !important;
+  transition:
+    border-color var(--nad-duration-fast) var(--nad-ease),
+    background-color var(--nad-duration-fast) var(--nad-ease),
+    box-shadow var(--nad-duration-fast) var(--nad-ease);
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  border-color: color-mix(in srgb, var(--nad-accent) 60%, transparent) !important;
+  box-shadow: var(--nad-focus-ring) !important;
+  outline: none !important;
 }
 
 .menu_button>* {
@@ -851,11 +1086,16 @@ select {
 
 .menu_button{
     filter: unset !important; 
-    padding: 6px 8px;
+    padding: var(--nad-control-padding-y) var(--nad-control-padding-x);
     text-shadow: unset !important;
     font-size: calc(var(--mainFontSize) * 0.9);
     background-color: var(--button-outline-danger-background) !important;
     color: color-mix(in srgb, var(--SmartThemeBodyColor) 50%, white 60%);
+    border-radius: var(--nad-radius-md) !important;
+    transition:
+      background-color var(--nad-duration-fast) var(--nad-ease),
+      color var(--nad-duration-fast) var(--nad-ease),
+      transform var(--nad-duration-fast) var(--nad-ease);
 }
 .menu_button:hover{
     background-color: var(--button-outline-danger-background-hover) !important;
@@ -863,6 +1103,12 @@ select {
 
 .menu_button:active{
     background-color: var(--button-outline-danger-background-active) !important;
+    transform: scale(0.97);
+}
+
+.menu_button:focus-visible {
+    box-shadow: var(--nad-focus-ring) !important;
+    outline: none !important;
 }
 
 .menu_button > small {
@@ -887,7 +1133,7 @@ input[type="radio"],
 input[type="checkbox"] {
   appearance: none;
   background-color: var(--NSDThemeHiglitesColor) !important;
-  border-radius: 72px;
+  border-radius: var(--nad-radius-pill);
   border-style: none;
   flex-shrink: 0;
   height: 16px;
@@ -898,6 +1144,7 @@ input[type="checkbox"] {
   transform:none;
   border: inherit;
   padding: unset !important;  
+  transition: background-color var(--nad-duration-fast) var(--nad-ease);
 }
 
 input[type="radio"]::before, 
@@ -912,7 +1159,7 @@ input[type="checkbox"]::before {
 
 input[type="radio"]::after, 
 input[type="checkbox"]::after {
-  transition: all 100ms ease-out;
+  transition: all var(--nad-duration-fast) var(--nad-ease-out);
 }
 
 input[type="radio"]::after, 
@@ -940,12 +1187,12 @@ input[type="checkbox"]:hover {
 
 input[type="radio"]:checked, 
 input[type="checkbox"]:checked {
-  background-color: var(--white50a) !important;
+  background-color: var(--nad-accent) !important;
 }
 
 input[type="radio"]:checked::after, 
 input[type="checkbox"]:checked::after {
-  background-color: #fff !important;
+  background-color: var(--nad-accent-contrast) !important;
   left: 13px;
 }
 
@@ -954,9 +1201,15 @@ input[type="checkbox"]:focus:not(.focus-visible) {
   outline: 0;
 }
 
+input[type="radio"]:focus-visible, 
+input[type="checkbox"]:focus-visible {
+  box-shadow: var(--nad-focus-ring) !important;
+  outline: none !important;
+}
+
 input[type="radio"]:checked:hover, 
 input[type="checkbox"]:checked:hover {
-  background-color: var(--NSDThemeBG4Color) !important;
+  background-color: var(--nad-accent-hover) !important;
 }
 
 .drawer-toggle:has(.openIcon),
@@ -1013,10 +1266,29 @@ input[type="checkbox"]:checked:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: var(--nad-radius-md);
+  transition:
+    background-color var(--nad-duration-fast) var(--nad-ease),
+    color var(--nad-duration-fast) var(--nad-ease),
+    opacity var(--nad-duration-fast) var(--nad-ease);
+}
+
+.drawer-icon:hover {
+  background-color: var(--nad-glass-highlight);
 }
 
 .drawer-icon.closedIcon {
   opacity: 0.4;
+}
+
+.drawer-icon.closedIcon:hover {
+  opacity: 0.85;
+}
+
+.drawer-icon.openIcon {
+  opacity: 1;
+  color: var(--nad-accent) !important;
+  background-color: var(--nad-accent-soft);
 }
 
 .drawer-toggle .drawer-icon {
@@ -1037,9 +1309,9 @@ input[type="checkbox"]:checked:hover {
 }
 
 .drawer-content{
-  border-left: 1px solid var(--SmartThemeBorderColor) !important;
-  border-top: 1px solid var(--SmartThemeBorderColor) !important;
-  border-right: 1px solid var(--SmartThemeBorderColor);
+  border-left: 1px solid var(--nad-glass-border) !important;
+  border-top: 1px solid var(--nad-glass-border) !important;
+  border-right: 1px solid var(--nad-glass-border);
   content-visibility: auto !important;
 }
 
@@ -1063,8 +1335,8 @@ input[type="checkbox"]:checked:hover {
 #ctsi-drawer,
 #ts-drawer
 {
-  border-left: 1px solid var(--SmartThemeBorderColor) !important;
-  border-top: 1px solid var(--SmartThemeBorderColor) !important;
+  border-left: 1px solid var(--nad-glass-border) !important;
+  border-top: 1px solid var(--nad-glass-border) !important;
   border-right: unset !important;
 
 }
@@ -1106,24 +1378,26 @@ input[type="checkbox"]:checked:hover {
 
 #WorldInfo {
   padding: 0px !important;
-  background-color: var(--NSDThemeBG4Color) !important;
-  border-top-left-radius: 8px !important;
+  background-color: var(--nad-surface-4) !important;
+  backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  border-top-left-radius: var(--nad-radius-md) !important;
 }
 
 #stqrd--drawer-v2,
 .stqrd--editorPanel:is(body > *) {
   padding-bottom: 4px !important;
-  border-top-left-radius: 8px !important;
+  border-top-left-radius: var(--nad-radius-md) !important;
 }
 
 .prism-code-editor{
-  --editor__bg: var(--SmartThemeChatTintColor) !important;
-  border-top-left-radius: 8px !important;
+  --editor__bg: var(--nad-surface-1) !important;
+  border-top-left-radius: var(--nad-radius-md) !important;
 }
 
 #stqrd--drawer-v2 .stqrd--body,
 .stqrd--editorPanel:is(body > *) {
-  background-color: var(--SmartThemeBlurTintColor) !important;
+  background-color: var(--nad-surface-1) !important;
 }
 
 .stqrd--editorPanel .stqrd--footer{
@@ -1168,17 +1442,17 @@ body:has(#expression-image:not([src=""])),
 body:has(.zoomed_avatar.draggable)
 {
   #sheld {
-    border-top-right-radius: 8px !important;
-    border-bottom-right-radius: 8px !important;
-    border-right: 1px solid var(--SmartThemeBorderColor) !important;
+    border-top-right-radius: var(--nad-radius-lg) !important;
+    border-bottom-right-radius: var(--nad-radius-lg) !important;
+    border-right: 1px solid var(--nad-glass-border) !important;
   }
 }
 
 body:has(#WorldInfo.openDrawer):has(#right-nav-panel.openDrawer){
   #sheld {
-    border-top-right-radius: 8px !important;
+    border-top-right-radius: var(--nad-radius-lg) !important;
     border-top-left-radius: 0px !important;
-    border-right: 1px solid var(--SmartThemeBorderColor) !important;
+    border-right: 1px solid var(--nad-glass-border) !important;
   }
 }
 
@@ -1200,24 +1474,28 @@ body:has(#WorldInfo.openDrawer):has(#right-nav-panel.openDrawer){
 
 #extensionTopBar {
   border-radius: 0px !important;
-  border-top-left-radius: 8px !important;
-  background-color: var(--SmartThemeChatTintColor) !important;
-  border-top: 1px solid var(--SmartThemeBorderColor) !important;
-  border-left: 1px solid var(--SmartThemeBorderColor) !important;
+  border-top-left-radius: var(--nad-radius-lg) !important;
+  background-color: var(--nad-surface-1) !important;
+  backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  border-top: 1px solid var(--nad-glass-border) !important;
+  border-left: 1px solid var(--nad-glass-border) !important;
   border: unset;
   height: 48px !important;
 }
 
 #extensionTopBarSearchInput:placeholder-shown {
-  border-color: var(--SmartThemeBlurTintColor);
+  border-color: var(--nad-glass-border);
 }
 
 #extensionConnectionProfiles{
-    background-color: var(--SmartThemeChatTintColor) !important;
+    background-color: var(--nad-surface-1) !important;
+    backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
     border-radius: 0px !important;
-    border-top: 1px solid var(--SmartThemeBorderColor) !important;
-    border-left: 1px solid var(--SmartThemeBorderColor) !important;
-    border-right: 1px solid var(--SmartThemeBorderColor) !important;
+    border-top: 1px solid var(--nad-glass-border) !important;
+    border-left: 1px solid var(--nad-glass-border) !important;
+    border-right: 1px solid var(--nad-glass-border) !important;
     border-bottom: unset !important;
 }
 
@@ -1227,9 +1505,12 @@ body:has(#WorldInfo.openDrawer):has(#right-nav-panel.openDrawer){
 
 #extensionsMenu,
 #options {
-  background-color: var(--NSDThemeBG2Color) !important;
-  border-radius: 8px;
-  border: 1px solid color-mix(in srgb, var(--SmartThemeBorderColor) 50%, transparent) !important;
+  background-color: var(--nad-surface-2) !important;
+  backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
+  border-radius: var(--nad-radius-lg);
+  border: 1px solid var(--nad-glass-border) !important;
+  box-shadow: var(--nad-shadow-2) !important;
 }
 
 /* message block */
@@ -1243,9 +1524,9 @@ body:has(#WorldInfo.openDrawer):has(#right-nav-panel.openDrawer){
 }
 
 .mes_button:hover {
-  background-color: #333439;
+  background-color: var(--nad-glass-highlight);
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: var(--nad-radius-md);
 }
 
 .mes_reasoning_actions .mes_button{
@@ -1256,12 +1537,13 @@ body:has(#WorldInfo.openDrawer):has(#right-nav-panel.openDrawer){
 
 .mes_reasoning_actions,
 .mes_buttons{
-  border: 1px solid #97979f15;
-  --shadow-medium: 0 4px 8px 0 hsl(none 0% 0%/0.16);
-  box-shadow: var(--shadow-medium) !important;
-  background-color: #2c2d32;
+  border: 1px solid var(--nad-glass-border);
+  box-shadow: var(--nad-shadow-1) !important;
+  background-color: var(--nad-surface-2);
+  backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
   padding: 2px;
-  border-radius: 8px;
+  border-radius: var(--nad-radius-md);
 }
 
 .mes_block .ch_name {
@@ -1275,9 +1557,9 @@ body:has(#WorldInfo.openDrawer):has(#right-nav-panel.openDrawer){
 @media screen and (min-width: 1000px) {
   .mes .mes_buttons,
   .mes .mes_reasoning_actions {
-    transition: all 0.3s ease;
-    visibility: hidden;
-    opacity: 0;
+    transition:
+      opacity var(--nad-duration-base) var(--nad-ease),
+      visibility var(--nad-duration-base) var(--nad-ease);
     visibility: hidden;
     opacity: 0;
   }
@@ -1297,13 +1579,13 @@ body.bubblechat .mes {
 }
 
 body.bubblechat .mes[is_user="true"] {
-  border-radius: 0px 8px 8px 0px !important;
+  border-radius: 0px var(--nad-radius-lg) var(--nad-radius-lg) 0px !important;
   width: unset !important;
   margin-right: 8px !important;
 }
 
 body.bubblechat .mes[is_user="false"] {
-  border-radius: 8px 0px 0px 8px !important;
+  border-radius: var(--nad-radius-lg) 0px 0px var(--nad-radius-lg) !important;
   width: unset !important;
 }
 
@@ -1318,17 +1600,17 @@ body.bubblechat .mes[is_user="false"] {
   margin: unset !important;
   border-left: 2px solid var(--reasoning-body-color);
   border-top: 2px solid var(--reasoning-body-color);
-  border-radius: 8px 0px 0px 0px !important;
+  border-radius: var(--nad-radius-md) 0px 0px 0px !important;
   font-size: calc(var(--mainFontSize) * 0.7);
 }
 
 .mes_reasoning_header:has(.up) {
-  border-radius: 8px 0px 0px 0px !important;
+  border-radius: var(--nad-radius-md) 0px 0px 0px !important;
 }
 
 .mes_reasoning{
   color: var(--SmartThemeEmColor) !important;
-  border-radius: 0px 8px 0px 0px !important;
+  border-radius: 0px var(--nad-radius-md) 0px 0px !important;
   font-size: calc(var(--mainFontSize) * 0.9);
 }
 
@@ -1339,44 +1621,44 @@ body.bubblechat .mes[is_user="false"] {
 }
 
 .world_entry_form .inline-drawer-header {
-  background: var(--NSDThemeBG2Color);
+  background: var(--nad-surface-2);
 }
 
 .inline-drawer-header {
-  background: var(--NSDThemeBG4Color);
+  background: var(--nad-surface-4);
   padding: 8px;
 }
 
 .title_restorable {
-  border-radius: 8px 8px 0px 0px !important;
+  border-radius: var(--nad-radius-md) var(--nad-radius-md) 0px 0px !important;
   background: unset !important;
 }
 
 #CustomCSS-block,
 #UI-presets-block {
-  background: var(--NSDThemeBG4Color);
+  background: var(--nad-surface-4);
   display: flex;
-  border-radius: 8px;
+  border-radius: var(--nad-radius-md);
   margin: 4px 0px 12px 0px;
   padding: 2px;
 }
 
 #customCSS {
-  border-radius: 0px 0px 8px 8px !important;
+  border-radius: 0px 0px var(--nad-radius-md) var(--nad-radius-md) !important;
 }
 
 .inline-drawer-header:has(.up) {
-  border-radius: 8px 8px 0px 0px;
+  border-radius: var(--nad-radius-md) var(--nad-radius-md) 0px 0px;
 }
 
 .inline-drawer-header:has(.down) {
-  border-radius: 8px;
+  border-radius: var(--nad-radius-md);
 }
 
 .inline-drawer-content {
   padding: 8px;
-  background: var(--NSDThemeBG4Color);
-  border-radius: 0px 0px 8px 8px;
+  background: var(--nad-surface-4);
+  border-radius: 0px 0px var(--nad-radius-md) var(--nad-radius-md);
 }
 
 #qr--settings .inline-drawer-content {
@@ -1384,25 +1666,25 @@ body.bubblechat .mes[is_user="false"] {
 }
 
 .standoutHeader {
-  border-top-left-radius: 8px !important;
-  border-bottom-right-radius: 8px !important;
+  border-top-left-radius: var(--nad-radius-md) !important;
+  border-bottom-right-radius: var(--nad-radius-md) !important;
 }
 
 #extensions_settings .inline-drawer-toggle.inline-drawer-header,
 #extensions_settings2 .inline-drawer-toggle.inline-drawer-header,
 .standoutHeader,
 .userSettingsInnerExpandable {
-  background: var(--NSDThemeBG4Color);
+  background: var(--nad-surface-4);
   margin: unset !important;
   padding: 4px 8px;
   margin-bottom: 0px;
-  border-radius: 8px;
+  border-radius: var(--nad-radius-md);
   border: unset !important;
 }
 
 #extensions_settings .inline-drawer-toggle.inline-drawer-header:has(.up),
 #extensions_settings2 .inline-drawer-toggle.inline-drawer-header:has(.up) {
-  border-radius: 8px 8px 0px 0px;
+  border-radius: var(--nad-radius-md) var(--nad-radius-md) 0px 0px;
 }
 
 select {
@@ -1412,7 +1694,7 @@ select {
 }
 
 select option {
-  background-color: var(--SmartThemeBlurTintColor) !important;
+  background-color: var(--nad-surface-solid) !important;
   border: none;
   color: var(--SmartThemeBodyColor) !important;
 }
@@ -1421,7 +1703,7 @@ input,
 select,
 .interactable { 
   border: unset !important;
-  border-radius: 6px;
+  border-radius: var(--nad-radius-sm);
 }
 
 body.waifuMode #top-bar{
@@ -1448,13 +1730,13 @@ textarea,
 .drawer-content select,
 #top-settings-holder .text_pole {
   background-color: var(--NSDThemeHiglitesColor);
-  border: 1px solid color-mix(in srgb, var(--SmartThemeBorderColor) 50%, transparent) !important;
+  border: 1px solid var(--nad-glass-border) !important;
   font-size: 14px;
   font-weight: 500;
 }
 
 .drawer-content select:has(#send_textarea:focus-visible){
-  border: 1px solid var(--SmartThemeBorderColor) !important;
+  border: 1px solid var(--nad-glass-border-strong) !important;
 }
 
 .drawer-content select {
@@ -1477,18 +1759,18 @@ select:focus-visible,
 .text_pole:focus-visible,
 .textarea_compact:focus-visible,
 .neo-range-input:focus-visible {
-  outline: 1px solid var(--SmartThemeBorderColor);
+  outline: 1px solid color-mix(in srgb, var(--nad-accent) 60%, transparent);
 }
 
 select,
 .mdHotkeys,
 .text_pole,
 .textarea_compact {
-  border-radius: 8px !important;
+  border-radius: var(--nad-radius-md) !important;
 }
 
 .neo-range-input{
-  border-radius: 0 0 8px 8px !important;
+  border-radius: 0 0 var(--nad-radius-md) var(--nad-radius-md) !important;
   padding: 4px 2px !important;
 }
 
@@ -1533,7 +1815,7 @@ select,
 #lm_button_panel_pin_div{
   display: block !important;
   min-height: 48px !important;
-  border-bottom: 1px solid var(--SmartThemeBorderColor) !important;
+  border-bottom: 1px solid var(--nad-glass-border) !important;
   padding: 6px;
 }
 
@@ -1673,15 +1955,19 @@ select,
 #form_sheld {
   margin: unset !important;
   padding:  0px 8px 16px 8px !important;
-  background-color: var(--SmartThemeChatTintColor) !important;
-  border-left: 1px solid var(--SmartThemeBorderColor) !important;
+  background-color: var(--nad-surface-1) !important;
+  backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  border-left: 1px solid var(--nad-glass-border) !important;
 }
 
 
 #character_popup {
   padding: 0 8px 8px 8px !important;
   z-index: 30000;
-  background-color: var(--NSDThemeBG3Color) !important;
+  background-color: var(--nad-surface-3) !important;
+  backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
 }
 
 #character_cross{
@@ -1700,7 +1986,7 @@ select,
 #character_popup_text {
   margin: 0px -8px;
   z-index: 30001;
-  border-bottom: 1px solid var(--SmartThemeBorderColor) !important;
+  border-bottom: 1px solid var(--nad-glass-border) !important;
 }
 
 #character_popup-button-h3{
@@ -1709,7 +1995,7 @@ select,
 
 #CharListButtonAndHotSwaps {  
   padding: 8px 8px 0px 8px !important;
-  border-bottom: 1px solid var(--SmartThemeBorderColor) !important;
+  border-bottom: 1px solid var(--nad-glass-border) !important;
   min-height: 48px !important;
 }
 
@@ -1725,7 +2011,10 @@ select,
 }
 
 #top-settings-holder {
-  background-color: var(--SmartThemeBlurTintColor1) !important;
+  background-color: var(--nad-surface-1) !important;
+  backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  border-right: 1px solid var(--nad-glass-border);
   padding: 8px 0px 8px 0px;
   margin: 0px 0px 0px 0px;
   position: unset;
@@ -1744,7 +2033,7 @@ select,
 }
 
 #user-settings-block .flex-container.flexFlowRow.alignitemscenter.spaceBetween{
-  border-bottom: 1px solid var(--SmartThemeBorderColor) !important;
+  border-bottom: 1px solid var(--nad-glass-border) !important;
   padding: 8px 8px 0px 8px !important;
   min-height: 48px !important;
 }
@@ -1764,8 +2053,9 @@ select,
 #user-settings-block h4,
 .inline-drawer {
   margin: 2px 0px !important;
-  border-radius: 8px;
-  border: 1px solid color-mix(in srgb, var(--SmartThemeBorderColor) 50%, transparent) !important;
+  border-radius: var(--nad-radius-md);
+  border: 1px solid var(--nad-glass-border) !important;
+  transition: border-color var(--nad-duration-fast) var(--nad-ease);
 }
 
 .sd_settings .inline-drawer {
@@ -1778,7 +2068,7 @@ select,
 
 
 .inline-drawer:hover {
-  border: 1px solid var(--SmartThemeBorderColor) !important;
+  border: 1px solid var(--nad-glass-border-strong) !important;
 }
 
 #extensions_settings .inline-drawer-toggle.inline-drawer-header,
@@ -1789,7 +2079,7 @@ select,
 
 #user-settings-block h4,
 .userSettingsInnerExpandable {
-  background: var(--NSDThemeBG4Color);
+  background: var(--nad-surface-4);
   padding: 6px 6px !important;
   border: unset !important;
 }
@@ -1801,8 +2091,10 @@ select,
 #AdvancedFormatting,
 #rm_extensions_block,
 #user-settings-block{
-  background-color: var(--NSDThemeBG1Color) !important;
-  border-right: 1px solid var(--SmartThemeBorderColor) !important;
+  background-color: var(--nad-surface-1) !important;
+  backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  border-right: 1px solid var(--nad-glass-border) !important;
 }
 
 #rm_extensions_block .extensions_block{
@@ -1819,9 +2111,13 @@ body.waifuMode:has(#extensionTopBar) #chat {
 }
 
 .draggable {  
-  border-radius: 8px;
+  border-radius: var(--nad-radius-lg);
   z-index: 9999;
-  background-color: var(--SmartThemeChatTintColor) !important;
+  background-color: var(--nad-surface-1) !important;
+  backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  border: 1px solid var(--nad-glass-border);
+  box-shadow: var(--nad-shadow-2);
   padding: 8px !important;
 }
 
@@ -1835,9 +2131,14 @@ body.waifuMode:has(#extensionTopBar) #chat {
 body.no-blur #send_form,
 body #send_form,
 #send_form.compact {
-  background-color: var(--NSDThemeBG3Color) !important;
-  border-radius: 8px !important;
-  border: 1px solid color-mix(in srgb, var(--SmartThemeBorderColor) 50%, transparent) !important;
+  background-color: var(--nad-surface-3) !important;
+  backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  border-radius: var(--nad-radius-lg) !important;
+  border: 1px solid var(--nad-glass-border) !important;
+  transition:
+    border-color var(--nad-duration-base) var(--nad-ease),
+    box-shadow var(--nad-duration-base) var(--nad-ease);
 }
 
 #send_form {
@@ -1845,7 +2146,8 @@ body #send_form,
 }
 
 #send_form:has(#send_textarea:focus-visible) {
-  border: 1px solid var(--SmartThemeBorderColor) !important;
+  border: 1px solid color-mix(in srgb, var(--nad-accent) 55%, transparent) !important;
+  box-shadow: var(--nad-focus-ring) !important;
 }
 
 #qr--settings #qr--set-qrList .qr--set-qrListContents>.qr--set-item> :nth-child(5) {
@@ -1915,12 +2217,12 @@ body #send_form,
 
 .tracker-view-field-label {
   font-weight: bold;
-  font-size: 14px; 
+  font-size: var(--nad-font-sm); 
   overflow: visible !important;
 }
 
 .tracker-view-text-display {
-  font-size: 12px; 
+  font-size: var(--nad-font-xs); 
   padding-left: 8px; 
 }
 
@@ -1945,7 +2247,9 @@ body:has(.stcdx--root.stcdx--codex.stcdx--active) {
 
 body .stcdx--tooltip {
   position: absolute;
-  background-color: var(--SmartThemeBlurTintColor) !important;
+  background-color: var(--nad-surface-1) !important;
+  backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
   bottom: 0;
   right: 0;
   top: calc(2em);
@@ -1977,14 +2281,14 @@ body:has(#stcdx--codex.stcdx--active) #stcdx--settings-v2 {
 }
 
 body .stcdx--codex>.stcdx--header>.stcdx--action.stcdx--menu>.stcdx--books {
-  background-color: var(--SmartThemeBlurTintColor);
+  background-color: var(--nad-surface-1);
 }
 
 .right_menu_button,
 #rm_button_panel_pin_div,
 #rm_button_characters {
   opacity: 0.6 !important;
-  transition: 0.3s !important;
+  transition: opacity var(--nad-duration-base) var(--nad-ease) !important;
   color: var(--SmartThemeBodyColor) !important;
 }
 
@@ -1992,7 +2296,6 @@ body .stcdx--codex>.stcdx--header>.stcdx--action.stcdx--menu>.stcdx--books {
 #rm_button_characters:hover {
   filter:unset !important;
   opacity: 1 !important;
-  transition: 0.3s !important;
 }
 
 /*********
@@ -2120,7 +2423,7 @@ body.big_side-avatars .avatar img{
 
 body.charListGrid #rm_print_characters_block .avatar img,
 body.big-avatars .avatar img{
-  border-radius: 8px !important;
+  border-radius: var(--nad-radius-md) !important;
   border: unset !important;
   object-fit: cover !important;
   object-position: center !important;
@@ -2135,14 +2438,14 @@ body.big-avatars .avatar {
 }
 
 body.square-avatars .avatar img {
-  border-radius: 8px !important;
+  border-radius: var(--nad-radius-md) !important;
 }
 
 .avatar_collage{
   min-width: calc(var(--avatar-base-width) * var(--big-avatar-width-factor)) !important;
   max-width: calc(var(--avatar-base-width) * var(--big-avatar-width-factor)) !important;
   aspect-ratio: 2 / 3 !important;
-  border-radius: 8px !important;
+  border-radius: var(--nad-radius-md) !important;
   border: unset !important;
 }
 
@@ -2192,7 +2495,7 @@ body.charListGrid #rm_print_characters_block .group_select .avatar_collage {
   align-items: unset !important;
   overflow: hidden !important;
   background: linear-gradient(135deg, #2a2a2a 25%, #1e1e1e 75%);
-  border-radius: 8px !important;
+  border-radius: var(--nad-radius-md) !important;
   padding: 0px 0px 0px 8px !important;
 }
 
@@ -2200,14 +2503,14 @@ body.charListGrid #rm_print_characters_block .group_select .avatar_collage {
 .group_select.is_fav .avatar,
 .group_member.is_fav .avatar,
 .avatar.is_fav {
-  background: linear-gradient(315deg, rgba(255, 255, 255, 0.1) 0%, #1e1e1e 75%, var(--SmartThemeUnderlineColor) 60%, #2a2a2a 100%) !important;
-  border-radius: 8px;
+  background: linear-gradient(315deg, rgba(255, 255, 255, 0.1) 0%, #1e1e1e 75%, var(--nad-accent) 60%, #2a2a2a 100%) !important;
+  border-radius: var(--nad-radius-md);
 }
 
 .character_select.is_fav .ch_name,
 .group_select.is_fav .ch_name,
 .group_member.is_fav .ch_name {
-  color: var(--SmartThemeUnderlineColor);
+  color: var(--nad-accent);
 }
 
 .character_select.is_fav .avatar,
@@ -2221,14 +2524,15 @@ body #rm_print_characters_block .bogus_folder_select,
 body #rm_print_characters_block .character_select,
 body #rm_print_characters_block .group_select,
 #user_avatar_block .avatar-container {
-  border-radius: 8px;
+  border-radius: var(--nad-radius-md);
   height: auto;
+  transition: background-color var(--nad-duration-fast) var(--nad-ease);
 }
 
 .bogus_folder_select:hover,
 .character_select:hover,
 .group_select:hover {
-  background: linear-gradient(225deg, var(--SmartThemeBlurTintColor) 70%, var(--SmartThemeBlurTintColor1) 98%) !important;
+  background: linear-gradient(225deg, var(--nad-surface-1) 70%, var(--nad-surface-4) 98%) !important;
 }
 
 /* Only apply to browsers that don't support position-anchor */
@@ -2249,14 +2553,18 @@ body #rm_print_characters_block .group_select,
 
 .stwid--blocker .stwid--menu,
 .stqrd--blocker .stqrd--menu {
-  border: 1px solid var(--SmartThemeBorderColor) !important;
-  border-radius: 8px !important;
+  border: 1px solid var(--nad-glass-border) !important;
+  border-radius: var(--nad-radius-md) !important;
+  background-color: var(--nad-surface-2) !important;
+  backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
+  box-shadow: var(--nad-shadow-2) !important;
 }
 
 body.bubblechat .welcomePanel{
   border-radius: unset !important;
   border: unset;
-  border-bottom: 1px solid var(--SmartThemeBorderColor) !important;
+  border-bottom: 1px solid var(--nad-glass-border) !important;
 }
 
 
@@ -2314,7 +2622,7 @@ body.bubblechat .welcomePanel{
   #right-nav-panel, #left-nav-panel, #floatingPrompt, #cfgConfig, #logprobsViewer, #movingDivs > div{
     left: var(--nav-bar-width) !important;
     width: calc(100vw - var(--nav-bar-width)) !important;
-    background-color: var(--SmartThemeBlurTintColor) !important;
+    background-color: var(--nad-surface-solid) !important;
     min-width: unset !important;
   }
 
@@ -2335,13 +2643,49 @@ body.bubblechat .welcomePanel{
   body.bubblechat .mes[is_user="true"] {
     width: 100% !important;
   }
+
+  /* Touch-friendly targets on small screens. */
+  .menu_button,
+  .drawer-icon,
+  .mes_button {
+    min-height: 40px;
+    min-width: 40px;
+  }
+
+  .drawer-icon {
+    min-width: calc(var(--nav-bar-width) - 4px) !important;
+  }
+
+  /* Overlay panels go full-width on mobile. */
+  body.nad-overlay-panels #logprobsViewer:not(.maximized),
+  body.nad-overlay-panels #floatingPrompt:not(.maximized),
+  body.nad-overlay-panels #gallery,
+  body.nad-overlay-panels #summaryExtensionPopout,
+  body.nad-overlay-panels #groupMemberListPopout,
+  body.nad-overlay-panels #trackerInterface,
+  body.nad-overlay-panels #trackerUI,
+  body.nad-overlay-panels #cfgConfig,
+  body.nad-overlay-panels #objectiveExtensionPopout,
+  body.nad-overlay-panels #injectManagerSideBar,
+  body.nad-overlay-panels #extensionSideBar,
+  body.nad-overlay-panels #lvm--root,
+  body.nad-overlay-panels #movingDivs > #ctsi-drawer,
+  body.nad-overlay-panels #movingDivs > #ts-drawer,
+  body.nad-overlay-panels #vv--root,
+  body.nad-overlay-panels #notebookPanel,
+  body.nad-overlay-panels .stcdx--root,
+  body.nad-overlay-panels #left-nav-panel.drawer-content {
+    right: 4px !important;
+    left: var(--nav-bar-width) !important;
+    width: calc(100vw - var(--nav-bar-width) - 8px) !important;
+  }
   
 }
 
 
 .resizeHandle:hover,
 .resizeHandle:active {
-    background: var(--SmartThemeBorderColor);
+    background: var(--nad-accent);
 }
 
 .resizeHandle:hover::after {
@@ -2361,11 +2705,118 @@ body.bubblechat .welcomePanel{
     padding: 6px;
 }
 
+/* ============================================================
+   NAD v2 — Theme settings UI (grouped, searchable cards)
+   ============================================================ */
+
+.nad-settings-search {
+    display: flex;
+    align-items: center;
+    gap: var(--nad-space-2);
+    padding: var(--nad-space-2) var(--nad-space-3);
+    background: var(--nad-surface-4);
+    border: 1px solid var(--nad-glass-border);
+    border-radius: var(--nad-radius-md);
+}
+
+.nad-settings-search > i {
+    opacity: 0.55;
+    font-size: var(--nad-font-sm);
+}
+
+.nad-settings-search > input {
+    flex: 1;
+    background: transparent !important;
+    border: unset !important;
+    padding: 2px 0 !important;
+    font-size: var(--nad-font-sm) !important;
+}
+
+.nad-settings-search > input:focus-visible {
+    box-shadow: none !important;
+}
+
+#ts-settings-container {
+    gap: var(--nad-space-3);
+    width: 100%;
+}
+
+.nad-settings-group {
+    background: var(--nad-surface-4);
+    border: 1px solid var(--nad-glass-border);
+    border-radius: var(--nad-radius-md);
+    overflow: hidden;
+}
+
+.nad-settings-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--nad-space-2);
+    padding: var(--nad-space-2) var(--nad-space-3);
+    background: var(--nad-glass-highlight);
+    border-bottom: 1px solid var(--nad-glass-border);
+}
+
+.nad-settings-group-header > b {
+    font-size: var(--nad-font-sm);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+.nad-settings-group-reset {
+    opacity: 0.6;
+    font-size: var(--nad-font-xs);
+    padding: 2px 6px !important;
+    transition: opacity var(--nad-duration-fast) var(--nad-ease);
+}
+
+.nad-settings-group-reset:hover {
+    opacity: 1;
+}
+
+.nad-settings-group-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--nad-space-2);
+    padding: var(--nad-space-3);
+}
+
+.nad-setting-row {
+    gap: var(--nad-space-2);
+    min-height: var(--nad-control-height);
+}
+
+.nad-setting-row > small {
+    flex: 1 1 auto;
+    opacity: 0.9;
+}
+
+/* Compact density: tighten vertical rhythm across the UI. */
+body.nad-density-compact .nad-settings-group-body {
+    gap: var(--nad-space-1);
+    padding: var(--nad-space-2);
+}
+
+body.nad-density-compact .nad-setting-row {
+    min-height: unset;
+}
+
+body.nad-density-compact .mes {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+}
+
 .ts-drawer-content {
     position: fixed;
     padding: 10px;
     padding-top: 25px;
-    background-color: var(--SmartThemeBlurTintColor) !important;
+    background-color: var(--nad-surface-2) !important;
+    backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
+    border: 1px solid var(--nad-glass-border);
+    box-shadow: var(--nad-shadow-2);
     min-width: 100px !important;
     max-width: 90dvw;
     right: unset;
@@ -2373,7 +2824,7 @@ body.bubblechat .welcomePanel{
     flex-direction: column;
     padding: 1rem;
     z-index: 4000 !important;
-    border-radius: 6px;
+    border-radius: var(--nad-radius-lg);
     padding: 12px;
     max-height: calc(100dvh - calc(var(--topBarBlockSize) + var(--bottomFormBlockSize)) + var(--theme-margin));
 }
@@ -2505,7 +2956,7 @@ body.big_side-avatars .mesAvatarWrapper .avatar img {
   border: unset;
   top: 4px !important;
   padding: 0 !important;
-  background-color: var(--SmartThemeChatTintColor) !important;
+  background-color: var(--nad-surface-1) !important;
   width: unset !important;
   max-height: 100vh !important;
   max-width: unset !important;
@@ -2528,4 +2979,47 @@ max-height: 100% !important;
 
 .swipe_right, .swipe_left, .swipes-counter {
   color: var(--NSDbig_side-avatars-Color) !important;
+}
+
+/* ============================================================
+   NAD v2 — Glass fallbacks & accessibility
+   ============================================================ */
+
+/*
+  Browsers without backdrop-filter get solid, opaque surfaces.
+  We keep the same layout/radii/shadows so the theme still reads
+  as "modern", just without the frosted translucency.
+*/
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root {
+    --nad-glass-alpha-pct: 100%;
+    --nad-glass-alpha-strong-pct: 100%;
+    --nad-glass-alpha-subtle-pct: 100%;
+    --nad-glass-blur: 0px;
+    --nad-glass-blur-strong: 0px;
+    --nad-glass-saturate: 100%;
+    --nad-glass-border: color-mix(in srgb, #ffffff 12%, transparent);
+    --nad-glass-border-strong: color-mix(in srgb, #ffffff 20%, transparent);
+  }
+}
+
+/*
+  Respect the OS "reduce motion" preference: kill decorative
+  transitions/animations while keeping instant state changes.
+*/
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --nad-duration-fast: 0ms;
+    --nad-duration-base: 0ms;
+    --nad-duration-slow: 0ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

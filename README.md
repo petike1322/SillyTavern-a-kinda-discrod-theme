@@ -12,6 +12,24 @@ You will need:
 3. Reload page
 4. Select 'Not a Discord Theme' as UI Theme for colors
 
+## What's new in v2 (Glass)
+
+- **Modern glassmorphism** — frosted, translucent panels, popups, menus and drawers with
+  soft depth, consistent radii and a proper focus ring. Falls back to solid surfaces on
+  browsers without `backdrop-filter`, and respects `prefers-reduced-motion`.
+- **Overlay panels** — secondary right-side panels (World Info, Quick Replies, Gallery,
+  Tracker, Codex, Notebook, …) now float *over* the chat as frosted cards instead of
+  squeezing it. Toggle **Overlay Panels** off in Theme Customization to restore the
+  classic push layout.
+- **Rebuilt theme settings** — the Theme Customization drawer is now organized into
+  grouped cards (Layout, Appearance, Chat, Avatars, Colors, Behavior) with a **search
+  box** and **per-group reset** buttons.
+- **New settings** — Accent Color, Corner Roundness, Interface Density (Comfortable /
+  Compact), and Overlay Panels.
+
+All existing settings and CSS variables are preserved, so your saved configuration keeps
+working after upgrading.
+
 What I recommended to have too:
 
 - [SillyTavern-WorldInfoDrawer](https://github.com/LenAnderson/SillyTavern-WorldInfoDrawer)

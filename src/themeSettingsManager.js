@@ -110,18 +110,9 @@ class ThemeSettingsManager {
             if (!entry.varId || entry.varId === 'undefined') return;
 
             if (!this.settings.entries.hasOwnProperty(entry.varId)) {
-                let defaultValue;
-                if (entry.type === 'checkbox') {
-                    defaultValue = entry.checked !== undefined ? entry.checked : (entry.default || false);
-                } else if (entry.type === 'select') {
-                    const defaultOption = entry.options.find(opt => opt.value === entry.default) || entry.options[0];
-                    defaultValue = defaultOption.value;
-                } else {
-                    defaultValue = entry.default || '';
-                }
-                
+                const defaultValue = this.getDefaultValueForEntry(entry);
+
                 this.settings.entries[entry.varId] = defaultValue;
-                
 
                 if (entry.controlType === 'js' || this.jsCallbacks[entry.varId]) {
                     this.executeCallback(entry.varId, defaultValue, undefined);
@@ -158,7 +149,7 @@ class ThemeSettingsManager {
 
     generateSliderEntry(entry, value) {
         return `
-            <div class="flex-container alignitemscenter">  
+            <div class="flex-container alignitemscenter nad-setting-row" data-group="${entry.group || 'Other'}" data-search="${(entry.displayText || '').toLowerCase()}">  
                 <small data-i18n="${entry.displayText}">${entry.displayText}</small><br>    
                 <div class="alignitemscenter flex-container flexFlowColumn flexBasis48p flexGrow flexShrink gap0">
                     <input 
@@ -186,7 +177,7 @@ class ThemeSettingsManager {
 
     generateColorEntry(entry, value) {
         return `
-            <div class="flex-container alignitemscenter">
+            <div class="flex-container alignitemscenter nad-setting-row" data-group="${entry.group || 'Other'}" data-search="${(entry.displayText || '').toLowerCase()}">
                 <toolcool-color-picker id="ts-${entry.varId}" color="${value}" ></toolcool-color-picker>
                 <small>${entry.displayText}</small>
                 <div id="ts-reset-${entry.varId}" title="Reset to Default Color" class="menu_button margin0 interactable ts-color-reset" tabindex="0" style="margin-left: 8px;">
@@ -197,7 +188,7 @@ class ThemeSettingsManager {
 
     generateTextEntry(entry, value) {
         return `
-            <div class="flex-container alignitemscenter">
+            <div class="flex-container alignitemscenter nad-setting-row" data-group="${entry.group || 'Other'}" data-search="${(entry.displayText || '').toLowerCase()}">
                 <input type="text" class="text_pole wide100p widthNatural flex1 margin0" id="ts-${entry.varId}" value="${value}" />
                 <small>${entry.displayText}</small><br>
             </div>`;
@@ -205,7 +196,7 @@ class ThemeSettingsManager {
 
     generateCheckboxEntry(entry, value) {
         return `
-            <div class="flex-container alignitemscenter checkbox_label">
+            <div class="flex-container alignitemscenter checkbox_label nad-setting-row" data-group="${entry.group || 'Other'}" data-search="${(entry.displayText || '').toLowerCase()}">
                 <input id="ts-${entry.varId}" type="checkbox" ${value ? 'checked' : ''} />
                 <small>${entry.displayText}</small>
             </div>`;
@@ -218,7 +209,7 @@ class ThemeSettingsManager {
             </option>`).join('');
 
         return `
-            <div class="flex-container alignitemscenter">
+            <div class="flex-container alignitemscenter nad-setting-row" data-group="${entry.group || 'Other'}" data-search="${(entry.displayText || '').toLowerCase()}">
                 <small>${entry.displayText}</small>
                 <select class="widthNatural flex1 margin0" id="ts-${entry.varId}" >
                     ${options}
@@ -335,6 +326,17 @@ class ThemeSettingsManager {
         }
     }
 
+    getDefaultValueForEntry(entry) {
+        if (entry.type === 'checkbox') {
+            return entry.checked !== undefined ? entry.checked : (entry.default || false);
+        }
+        if (entry.type === 'select') {
+            const defaultOption = entry.options.find(opt => opt.value === entry.default) || entry.options[0];
+            return defaultOption.value;
+        }
+        return entry.default || '';
+    }
+
     resetToDefaults() {
 
         const oldSettings = { ...this.settings.entries };
@@ -344,32 +346,71 @@ class ThemeSettingsManager {
         this.updateCSSVariables({});
         
         this.entries.forEach(entry => {
-            let defaultValue;
-            if (entry.type === 'checkbox') {
-                defaultValue = entry.checked !== undefined ? entry.checked : (entry.default || false);
-            } else if (entry.type === 'select') {
-                const defaultOption = entry.options.find(opt => opt.value === entry.default) || entry.options[0];
-                defaultValue = defaultOption.value;
-            } else {
-                defaultValue = entry.default || '';
-            }
-            
-            this.handleValueChange(entry.varId, defaultValue);
+            this.handleValueChange(entry.varId, this.getDefaultValueForEntry(entry));
         });
         
         this.regenerateUI();
         console.log('[NADTheme] Settings reset to default values');
     }
 
+    resetGroupToDefaults(groupName) {
+        const groupEntries = this.entries.filter(entry => (entry.group || 'Other') === groupName);
+
+        groupEntries.forEach(entry => {
+            this.handleValueChange(entry.varId, this.getDefaultValueForEntry(entry));
+        });
+
+        this.regenerateUI();
+        console.log(`[NADTheme] Group "${groupName}" reset to defaults`);
+    }
+
+    filterSettings(query) {
+        const needle = String(query || '').trim().toLowerCase();
+        const container = document.querySelector('#ts-settings-container');
+        if (!container) return;
+
+        container.querySelectorAll('.nad-settings-group').forEach(groupEl => {
+            let visibleRows = 0;
+
+            groupEl.querySelectorAll('.nad-setting-row').forEach(rowEl => {
+                const haystack = rowEl.getAttribute('data-search') || '';
+                const matches = !needle || haystack.includes(needle);
+                rowEl.style.display = matches ? '' : 'none';
+                if (matches) visibleRows++;
+            });
+
+            groupEl.style.display = visibleRows > 0 ? '' : 'none';
+        });
+    }
+
     regenerateUI() {
         console.log('[NADTheme] Regenerating UI.');
         this.removeEventListeners();
         this.populateSettingsUI();
+
+        // Preserve any active search filter across regeneration.
+        const searchInput = document.getElementById('ts-settings-search');
+        if (searchInput && searchInput.value) {
+            this.filterSettings(searchInput.value);
+        }
     }
 
     setupButtons() {
         document.getElementById('ts-reset-defaults')?.addEventListener('click', () => {
             this.resetToDefaults();
+        });
+
+        // Search / filter settings by label.
+        document.getElementById('ts-settings-search')?.addEventListener('input', (event) => {
+            this.filterSettings(event.target.value);
+        });
+
+        // Per-group reset.
+        $(document).on('click', '.nad-settings-group-reset', (event) => {
+            const groupName = $(event.currentTarget).data('group-reset');
+            if (groupName) {
+                this.resetGroupToDefaults(groupName);
+            }
         });
 
         $(document).on('click', '.ts-inline-drawer-maximize', () => {
@@ -422,11 +463,10 @@ class ThemeSettingsManager {
     }
 
     populateSettingsUI() {
-        const row1 = document.querySelector('#ts-row-1');
-        const row2 = document.querySelector('#ts-row-2');
+        const container = document.querySelector('#ts-settings-container');
 
-        if (!row1 || !row2) {
-            console.error('[NADTheme] Row containers not found!');
+        if (!container) {
+            console.error('[NADTheme] Settings container not found!');
             return;
         }
 
@@ -435,26 +475,48 @@ class ThemeSettingsManager {
             this.updateCSSVariables({});
             console.warn('[NADTheme] No entries provided');
 
-            row1.innerHTML = '<div class="flex-container flexFlowColumn"><p class="alert-message">No theme settings available.</p></div>';
-            row2.innerHTML = '';
+            container.innerHTML = '<div class="flex-container flexFlowColumn"><p class="alert-message">No theme settings available.</p></div>';
             return;
         }
 
         this.initializeSettingsEntries();
 
-        row1.innerHTML = '';
-        row2.innerHTML = '';
-
-        this.entries.forEach((entry, index) => {
-            const savedValue = this.settings.entries[entry.varId];
-            const inputHTML = this.generateHTMLForEntry(entry, savedValue);
-
-            if (index < this.entries.length / 2) {
-                row1.insertAdjacentHTML('beforeend', inputHTML);
-            } else {
-                row2.insertAdjacentHTML('beforeend', inputHTML);
+        // Group entries by their `group` metadata, preserving declaration order.
+        const groups = new Map();
+        this.entries.forEach(entry => {
+            const groupName = entry.group || 'Other';
+            if (!groups.has(groupName)) {
+                groups.set(groupName, []);
             }
+            groups.get(groupName).push(entry);
         });
+
+        let html = '';
+
+        groups.forEach((groupEntries, groupName) => {
+            const groupId = `ts-group-${groupName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+
+            const rows = groupEntries.map(entry => {
+                const savedValue = this.settings.entries[entry.varId];
+                return this.generateHTMLForEntry(entry, savedValue);
+            }).join('');
+
+            html += `
+                <div class="nad-settings-group" id="${groupId}" data-group="${groupName}">
+                    <div class="nad-settings-group-header">
+                        <b>${groupName}</b>
+                        <div class="nad-settings-group-reset menu_button margin0 interactable" tabindex="0"
+                             title="Reset ${groupName} to defaults" data-group-reset="${groupName}">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </div>
+                    </div>
+                    <div class="nad-settings-group-body">
+                        ${rows}
+                    </div>
+                </div>`;
+        });
+
+        container.innerHTML = html;
 
         this.setupEventListeners();
     }
@@ -468,11 +530,12 @@ class ThemeSettingsManager {
                 </div>
                 <div id="ts-drawer-content" class="inline-drawer-content">
                     <div class="flex-container ts-container flexFlowColumn">
-                        <div class="flex-container ts-flex-container" >
-                            <div id="ts-row-1" class="flex-container flexFlowColumn" style="flex: 1; flex-direction: column;">
-                            </div>
-                            <div id="ts-row-2" class="flex-container flexFlowColumn" style="flex: 1; flex-direction: column;">
-                            </div>
+                        <div class="nad-settings-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="ts-settings-search" class="text_pole margin0"
+                                   placeholder="Search settings..." autocomplete="off" />
+                        </div>
+                        <div id="ts-settings-container" class="flex-container flexFlowColumn">
                         </div>
                         <div class="flex-container ts-button-container">
                             <div id="ts-reset-defaults" title="Reset to Defaults" data-i18n="[title]Reset to Defaults" class="menu_button margin0 interactable" tabindex="0">

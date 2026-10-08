@@ -30,7 +30,7 @@ async function importJsonTheme() {
         "bot_mes_blur_tint_color": "rgba(26, 26, 30, 1)",
         "shadow_color": "rgba(41, 41, 41, 1)",
         "shadow_width": 0,
-        "border_color": "rgba(47, 47, 48, 0.5)",
+        "border_color": "rgba(255, 255, 255, 0.09)",
         "font_scale": 1,
         "fast_ui_mode": true,
         "waifuMode": false,
