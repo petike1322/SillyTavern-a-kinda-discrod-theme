@@ -31,8 +31,9 @@ You will need:
   name, description, personality, scenario, creator/version and tags. Toggle it from the
   **id-card icon** in the left nav rail, or disable it entirely via the
   **Character Profile Popout** setting.
-- **User Profile Bar** — a compact, fixed bottom-left bar showing the active persona.
-  Click it to open Persona Management. Its height matches the message composer.
+- **User Profile Bar** — a fixed bottom-left dock showing the active persona.
+  It matches the character profile panel's width, reserves layout space so chat and
+  navigation panels move aside, and opens Persona Management when clicked.
 
 All existing settings and CSS variables are preserved, so your saved configuration keeps
 working after upgrading.

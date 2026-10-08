@@ -194,7 +194,7 @@ body:has(#bg1) {
   
    /* Core layout variables */
   --nav-bar-width: 48px;
-  --nad-user-profile-width: clamp(148px, 18vw, 232px);
+  --nad-user-profile-width: 340px;
   --panel-base-width: calc(var(--NSDpanel-base-width) *1px) !important;
   --char-panel-grid-width: 580px;
   --char-panel-normal-width: 420px;
@@ -288,9 +288,9 @@ body:has(#bg1) {
   */
   --nad-profile-width: 340px;
 
-  --center-panels-width: calc(100vw - var(--nav-bar-width) - var(--panels-reserved-width) - var(--char-panel-width) - var(--nad-profile-width));
+  --center-panels-width: calc(100vw - var(--nav-bar-width) - var(--panels-reserved-width) - var(--char-panel-width) - var(--nad-profile-width) - var(--nad-user-profile-width) - 8px);
   --chat-panel-width: calc(var(--center-panels-width) - var(--expression-reserved-width));
-  --chat-panel-left-offset: calc(var(--nav-bar-width) + var(--char-panel-width));
+  --chat-panel-left-offset: calc(var(--nav-bar-width) + var(--char-panel-width) + var(--nad-user-profile-width) + 8px);
 
 }
 
@@ -796,7 +796,7 @@ body.nad-overlay-panels #left-nav-panel.drawer-content {
 
 body.waifuMode .zoomed_avatar,
 body.waifuMode #expression-wrapper{
-  left: calc(var(--nav-bar-width) + var(--char-panel-width) +  calc(var(--chat-panel-width) / 2) ) !important;
+  left: calc(var(--chat-panel-left-offset) + (var(--chat-panel-width) / 2)) !important;
   width: 20vw !important;
   right: unset !important;
 }
@@ -863,7 +863,7 @@ body.waifuMode .zoomed_avatar {
   border-top-right-radius: 0px !important;
   border-left: 1px solid var(--nad-glass-border) !important;
   border-top: 1px solid var(--nad-glass-border) !important;
-  left: var(--nav-bar-width);
+  left: calc(var(--nav-bar-width) + var(--nad-user-profile-width) + 8px);
   width: var(--char-panel-width);
   height: calc(100svh);
   z-index: 10 !important;
@@ -909,7 +909,7 @@ body.waifuMode .zoomed_avatar {
     background: transparent;
     transition: background-color var(--nad-duration-base) var(--nad-ease);
     pointer-events: auto;
-    left: calc(var(--nav-bar-width) + var(--char-panel-width) + var(--chat-panel-width));
+    left: calc(var(--chat-panel-left-offset) + var(--chat-panel-width));
     
 }
 .resizeHandle::after {
@@ -918,7 +918,7 @@ body.waifuMode .zoomed_avatar {
     transform: translateY(-50%);
     width: 8px;
     background: var(--nad-glass-border-strong);
-    left: calc(var(--nav-bar-width) + var(--char-panel-width) + var(--chat-panel-width));
+    left: calc(var(--chat-panel-left-offset) + var(--chat-panel-width));
     opacity: 0.5;
 }
 
@@ -2159,8 +2159,6 @@ body #send_form,
 #send_form {
   outline: unset !important;
   box-sizing: border-box !important;
-  margin-left: calc(var(--nad-user-profile-width) - var(--nav-bar-width) + 8px) !important;
-  width: calc(100% - var(--nad-user-profile-width) + var(--nav-bar-width) - 8px) !important;
 }
 
 #send_form:has(#send_textarea:focus-visible) {
@@ -2637,7 +2635,14 @@ body.bubblechat .welcomePanel{
     width: unset !important;
   }
 
-  #right-nav-panel, #left-nav-panel, #floatingPrompt, #cfgConfig, #logprobsViewer, #movingDivs > div{
+  #right-nav-panel {
+    left: calc(var(--nav-bar-width) + var(--nad-user-profile-width) + 8px) !important;
+    width: calc(100vw - var(--nav-bar-width) - var(--nad-user-profile-width) - 8px) !important;
+    background-color: var(--nad-surface-solid) !important;
+    min-width: unset !important;
+  }
+
+  #left-nav-panel, #floatingPrompt, #cfgConfig, #logprobsViewer, #movingDivs > div{
     left: var(--nav-bar-width) !important;
     width: calc(100vw - var(--nav-bar-width)) !important;
     background-color: var(--nad-surface-solid) !important;
@@ -2645,11 +2650,15 @@ body.bubblechat .welcomePanel{
   }
 
   #sheld,
-  #character_popup,
-  .drawer-content{
+  #character_popup {
+    left: calc(var(--nav-bar-width) + var(--nad-user-profile-width) + 8px) !important;
+    width: calc(100vw - var(--nav-bar-width) - var(--nad-user-profile-width) - 8px) !important;
+    position: absolute !important;
+  }
+
+  .drawer-content {
     left: var(--nav-bar-width) !important;
     width: calc(100vw - var(--nav-bar-width)) !important;
-    position: absolute !important;
   }
 
   .stqrd--editorPanel:is(body > *), #stqrd--drawer-v2, #WorldInfo{
@@ -2831,7 +2840,7 @@ body.nad-density-compact .mes {
    ============================================================ */
 .nad-user-profile-bar {
     position: fixed;
-    left: 4px;
+    left: calc(var(--nav-bar-width) + 4px);
     bottom: 4px;
     z-index: 60;
     display: flex;
@@ -3109,6 +3118,7 @@ body.nad-density-compact .mes {
 @media screen and (max-width: 1000px) {
     body:has(#bg1) {
         --nad-profile-width: 260px;
+        --nad-user-profile-width: 260px;
     }
 }
 
