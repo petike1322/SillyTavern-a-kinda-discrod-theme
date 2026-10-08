@@ -450,21 +450,8 @@ body:has(#gallery.draggable) {
 /*1*/
 #left-nav-panel.drawer-content {
   right: var(--panel-settings-offset) !important;
-  background-color: color-mix(in srgb, var(--NSDThemeBG1Color) 94%, transparent) !important;
-  backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
-  -webkit-backdrop-filter: blur(var(--nad-glass-blur-strong)) saturate(var(--nad-glass-saturate));
+  background-color: var(--nad-surface-1) !important;
   padding: 0;
-}
-
-body:has(#left-nav-panel.openDrawer)::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 39;
-  background: color-mix(in srgb, var(--NSDThemeBG1Color) 12%, transparent);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  pointer-events: none;
 }
 
 /*2*/
