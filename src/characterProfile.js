@@ -1,4 +1,4 @@
-import { eventSource, event_types } from '../../../../../script.js';
+import { eventSource, event_types, this_chid, characters, substituteParams } from '../../../../../script.js';
 import { DOMPurify } from '../../../../../lib.js';
 
 /**
@@ -9,9 +9,9 @@ import { DOMPurify } from '../../../../../lib.js';
  * creator/version metadata and tags. Updates automatically when the
  * selected character or chat changes.
  *
- * Character data is read from the global SillyTavern context (window.*)
- * rather than named imports, so a missing/renamed export can never break
- * the whole theme — the popout simply degrades gracefully.
+ * `this_chid` and `characters` are live ES-module bindings exported by
+ * SillyTavern's script.js, so they always reflect the current selection.
+ * Characters may be "shallow" (lazy-loaded) — we unshallow on demand.
  */
 
 const POPOUT_ID = 'nad-char-profile';
@@ -22,6 +22,25 @@ let popoutEl = null;
 let toggleEl = null;
 let isOpen = false;
 let enabled = true;
+let unshallowing = false;
+
+/**
+ * Lazily resolves SillyTavern's `unshallowCharacter` helper.
+ * Loaded via dynamic import so that older SillyTavern versions (which don't
+ * export it) don't cause a module link error that would break the theme.
+ * @returns {Promise<Function|null>}
+ */
+let unshallowCharacterFn;
+async function getUnshallowCharacter() {
+    if (unshallowCharacterFn !== undefined) return unshallowCharacterFn;
+    try {
+        const mod = await import('../../../../../script.js');
+        unshallowCharacterFn = typeof mod.unshallowCharacter === 'function' ? mod.unshallowCharacter : null;
+    } catch (e) {
+        unshallowCharacterFn = null;
+    }
+    return unshallowCharacterFn;
+}
 
 /* ------------------------------------------------------------------ */
 /*  Data helpers                                                       */
@@ -29,23 +48,27 @@ let enabled = true;
 
 function getCurrentCharacter() {
     try {
-        const chid = window.this_chid;
-        const chars = window.characters;
-        if (chid === undefined || chid === null || chid === 'undefined') return null;
-        if (!Array.isArray(chars)) return null;
-        return chars[Number(chid)] || null;
+        if (this_chid === undefined || this_chid === null || this_chid === 'undefined') return null;
+        if (!Array.isArray(characters)) return null;
+        return characters[Number(this_chid)] || null;
     } catch (e) {
         return null;
     }
 }
 
+/**
+ * Reads a character field, falling back to the V2 `data` object.
+ * Works for both full and shallow character objects.
+ */
+function readField(character, key) {
+    if (!character) return '';
+    const value = character[key] ?? character.data?.[key];
+    return value ?? '';
+}
+
 function getAvatarUrl(character) {
     if (!character || !character.avatar) return '';
-    try {
-        if (typeof window.getThumbnailUrl === 'function') {
-            return window.getThumbnailUrl('avatar', character.avatar);
-        }
-    } catch (e) { /* ignore */ }
+    // Standard SillyTavern thumbnail endpoint.
     return `/thumbnail?type=avatar&file=${encodeURIComponent(character.avatar)}`;
 }
 
@@ -53,8 +76,9 @@ function substitute(text) {
     if (!text) return '';
     let out = String(text);
     try {
-        if (typeof window.substituteParams === 'function') {
-            out = window.substituteParams(out);
+        const fn = typeof substituteParams === 'function' ? substituteParams : window.substituteParams;
+        if (typeof fn === 'function') {
+            out = fn(out);
         }
     } catch (e) { /* ignore */ }
     return out;
@@ -117,12 +141,13 @@ function renderProfile(character) {
     const name = character.name || 'Unknown';
     const avatarUrl = getAvatarUrl(character);
     const username = toUsername(name);
-    const description = sanitize(character.description);
-    const personality = sanitize(character.personality);
-    const scenario = sanitize(character.scenario);
-    const creator = character.creator ? escapeHtml(character.creator) : '';
-    const version = character.character_version ? escapeHtml(character.character_version) : '';
-    const tags = Array.isArray(character.tags) ? character.tags.filter(Boolean) : [];
+    const description = sanitize(readField(character, 'description'));
+    const personality = sanitize(readField(character, 'personality'));
+    const scenario = sanitize(readField(character, 'scenario'));
+    const creator = readField(character, 'creator') ? escapeHtml(readField(character, 'creator')) : '';
+    const version = readField(character, 'character_version') ? escapeHtml(readField(character, 'character_version')) : '';
+    const rawTags = readField(character, 'tags');
+    const tags = Array.isArray(rawTags) ? rawTags.filter(Boolean) : [];
 
     const metaRows = [];
     if (creator) {
@@ -177,7 +202,25 @@ function renderProfile(character) {
 
 function refreshProfile() {
     if (!popoutEl) return;
-    renderProfile(getCurrentCharacter());
+
+    const character = getCurrentCharacter();
+    renderProfile(character);
+
+    // If the character is lazy-loaded ("shallow"), its description/personality
+    // fields are empty. Fetch the full data once, then re-render.
+    if (character && character.shallow && !unshallowing) {
+        unshallowing = true;
+        getUnshallowCharacter()
+            .then((fn) => (fn ? fn(String(this_chid)) : null))
+            .then(() => {
+                unshallowing = false;
+                renderProfile(getCurrentCharacter());
+            })
+            .catch((e) => {
+                unshallowing = false;
+                console.warn('[NADTheme] Failed to unshallow character:', e);
+            });
+    }
 }
 
 /* ------------------------------------------------------------------ */
@@ -274,13 +317,15 @@ function createPopout() {
 function bindEvents() {
     const refresh = () => refreshProfile();
 
+    // Confirmed SillyTavern event names (see public/scripts/events.js).
+    // Selecting a character fires CHAT_CHANGED / CHAT_LOADED.
     const eventNames = [
-        'CHARACTER_SELECTED',
         'CHAT_CHANGED',
         'CHAT_LOADED',
         'CHARACTER_EDITED',
         'CHARACTER_DELETED',
         'CHARACTER_DUPLICATED',
+        'CHARACTER_RENAMED',
         'GROUP_UPDATED',
     ];
 

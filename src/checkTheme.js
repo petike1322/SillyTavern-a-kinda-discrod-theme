@@ -7,7 +7,7 @@ export async function checkTheme() {
 
 
     const hasDiscordTheme = $('#themes option').filter(function() {
-        return $(this).val() === 'Not a Discord Theme';
+        return $(this).val() === 'Slightly A Discord Theme';
     }).length > 0;
     
     if (!hasDiscordTheme) {
@@ -18,7 +18,7 @@ export async function checkTheme() {
 
 async function importJsonTheme() {
     const themeData = {
-        "name": "Not a Discord Theme",
+        "name": "Slightly A Discord Theme",
         "blur_strength": 0,
         "main_text_color": "rgba(243, 243, 243, 1)",
         "italics_text_color": "rgba(150, 150, 150, 1)",

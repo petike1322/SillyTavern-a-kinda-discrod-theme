@@ -1,4 +1,4 @@
-# SillyTavern-Not-A-Discord-Theme
+# Slightly A Discord Theme
 ![image-2](https://github.com/user-attachments/assets/e52f80be-949c-41d9-9ffe-025820995604)
 
 ![image](https://github.com/user-attachments/assets/980c12bf-1dba-415d-9f17-6efc06b8028e)
@@ -10,7 +10,7 @@ You will need:
 1. Turn off other themes
 2. Install theme extension https://github.com/IceFog72/SillyTavern-Not-A-Discord-Theme
 3. Reload page
-4. Select 'Not a Discord Theme' as UI Theme for colors
+4. Select 'Slightly A Discord Theme' as UI Theme for colors
 
 ## What's new in v2 (Glass)
 
