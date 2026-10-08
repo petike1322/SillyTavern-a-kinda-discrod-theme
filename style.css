@@ -194,6 +194,7 @@ body:has(#bg1) {
   
    /* Core layout variables */
   --nav-bar-width: 48px;
+  --nad-user-profile-width: clamp(148px, 18vw, 232px);
   --panel-base-width: calc(var(--NSDpanel-base-width) *1px) !important;
   --char-panel-grid-width: 580px;
   --char-panel-normal-width: 420px;
@@ -2157,6 +2158,9 @@ body #send_form,
 
 #send_form {
   outline: unset !important;
+  box-sizing: border-box !important;
+  margin-left: calc(var(--nad-user-profile-width) - var(--nav-bar-width) + 8px) !important;
+  width: calc(100% - var(--nad-user-profile-width) + var(--nav-bar-width) - 8px) !important;
 }
 
 #send_form:has(#send_textarea:focus-visible) {
@@ -2823,9 +2827,80 @@ body.nad-density-compact .mes {
 }
 
 /* ============================================================
+   NAD v2 — Discord-style User Profile Bar
+   ============================================================ */
+.nad-user-profile-bar {
+    position: fixed;
+    left: 4px;
+    bottom: 4px;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: var(--nad-user-profile-width);
+    height: var(--text-imput-height, 42px);
+    padding: 0 10px !important;
+    overflow: hidden;
+    color: var(--SmartThemeBodyColor);
+    text-align: left;
+    background: var(--nad-surface-3);
+    border: 1px solid var(--nad-glass-border);
+    border-radius: var(--nad-radius-lg);
+    backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
+    cursor: pointer;
+}
+
+.nad-user-profile-bar:hover {
+    background: var(--nad-surface-2);
+}
+
+.nad-user-profile-avatar {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: 0 0 30px;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    color: var(--nad-accent-contrast);
+    background: var(--nad-accent);
+    border-radius: var(--nad-radius-pill);
+}
+
+.nad-user-profile-avatar > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.nad-user-profile-avatar > img[hidden] {
+    display: none;
+}
+
+.nad-user-profile-avatar.has-avatar > i {
+    display: none;
+}
+
+.nad-user-profile-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    font-size: var(--nad-font-sm);
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nad-user-profile-menu {
+    flex: 0 0 auto;
+    opacity: 0.65;
+}
+
+/* ============================================================
    NAD v2 — Discord-style Character Profile (permanent right dock)
    ============================================================ */
-
 .nad-profile-popout {
     position: fixed;
     top: 4px;

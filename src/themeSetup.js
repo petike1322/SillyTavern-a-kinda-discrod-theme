@@ -7,6 +7,7 @@ import { drawerClickOverride } from './drawerClickOverride.js';
 import { checkTheme, resetMovablePanels } from './checkTheme.js';
 import { drawerStyleChangeOverride} from './chatStyle.js';
 import { initCharacterProfile, setCharacterProfileEnabled } from './characterProfile.js';
+import { initUserProfileBar } from './userProfileBar.js';
 import ThemeSettingsManager from './themeSettingsManager.js';
 
 export class ThemeSetup {
@@ -407,6 +408,7 @@ export class ThemeSetup {
             checkTheme();
 
             initCharacterProfile();
+            initUserProfileBar();
 
             this.addThemeSettings();
 
@@ -439,4 +441,3 @@ export class ThemeSetup {
         this.themeManager.registerCallback(varId, callback);
     }
 }
-
