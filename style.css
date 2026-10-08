@@ -2858,6 +2858,7 @@ body.nad-density-compact .mes {
     backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
     -webkit-backdrop-filter: blur(var(--nad-glass-blur)) saturate(var(--nad-glass-saturate));
     cursor: pointer;
+	margin-bottom: 5px;
 }
 
 .nad-user-profile-bar:hover {
